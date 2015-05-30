@@ -1,8 +1,8 @@
-package com.developworlds.desktop;
+package com.developworlds.flockingsample.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.developworlds.FlockingApplication;
+import com.developworlds.flockingsample.FlockingApplication;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
