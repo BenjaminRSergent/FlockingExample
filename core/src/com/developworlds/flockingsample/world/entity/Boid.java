@@ -22,7 +22,7 @@ public class Boid {
     public Vector2 position = new Vector2();
     public Vector2 desiredVelocity = new Vector2();
     public Vector2 velocity = new Vector2();
-    public Vector2 size = new Vector2(10,10);
+    public Vector2 size = new Vector2(10, 10);
 
     public float maxAcceleration = 200;
     public float maxSpeed = 200;
@@ -80,15 +80,6 @@ public class Boid {
 
     public BoidType getType() {
         return type;
-    }
-
-    public boolean isDistSqInside(float distSq) {
-        // Is the distance squared less than the square of the smallest size.
-        return distSq < Math.pow(Math.min(size.x, size.y), 2);
-    }
-
-    public float getDistanceSqTo(Vector2 goal) {
-        return goal.cpy().sub(position).len2();
     }
 
     public float getRadiusSq() {

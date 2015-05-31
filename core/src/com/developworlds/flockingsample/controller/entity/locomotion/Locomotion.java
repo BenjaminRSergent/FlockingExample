@@ -5,7 +5,7 @@ import com.developworlds.flockingsample.world.entity.Boid;
 
 public abstract class Locomotion {
     // Slower than 2 px per second
-    final static float MIN_VELO_SQ = 2 * 2;
+    private final static float MIN_VELO_SQ = 2 * 2;
 
     public abstract void update(Boid boid, float deltaTime);
 

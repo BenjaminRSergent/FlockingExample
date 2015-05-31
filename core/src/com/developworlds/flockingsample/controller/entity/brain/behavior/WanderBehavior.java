@@ -40,6 +40,22 @@ public class WanderBehavior {
         return (float) ((Math.random() - 0.5) * 2 * maxJitter);
     }
 
+    public float getCurrAngle() {
+        return currAngle;
+    }
+
+    public void setCurrAngle(float currAngle) {
+        this.currAngle = currAngle;
+    }
+
+    public float getCircleDistance() {
+        return circleDistance;
+    }
+
+    public void setCircleDistance(float circleDistance) {
+        this.circleDistance = circleDistance;
+    }
+
     public float getCircleRadius() {
         return circleRadius;
     }

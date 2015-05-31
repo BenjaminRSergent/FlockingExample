@@ -5,9 +5,6 @@ import com.badlogic.gdx.graphics.Texture;
 
 import java.util.HashMap;
 
-/**
- * Created by benjamin-sergent on 5/30/15.
- */
 public class TextureManager {
     private HashMap<String, Texture> textureMap = new HashMap<String, Texture>();
     private static TextureManager instance = new TextureManager();

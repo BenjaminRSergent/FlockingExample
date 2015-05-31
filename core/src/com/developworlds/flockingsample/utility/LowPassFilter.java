@@ -2,9 +2,6 @@ package com.developworlds.flockingsample.utility;
 
 import com.badlogic.gdx.math.Vector2;
 
-/**
- * Created by benjamin-sergent on 5/30/15.
- */
 public class LowPassFilter {
     private float passConstant;
     private Vector2 currVal = new Vector2();

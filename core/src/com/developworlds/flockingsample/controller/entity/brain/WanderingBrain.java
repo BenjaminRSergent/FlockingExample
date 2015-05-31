@@ -6,7 +6,7 @@ import com.developworlds.flockingsample.world.World;
 import com.developworlds.flockingsample.world.entity.Boid;
 
 public class WanderingBrain extends BoidAI {
-    WanderBehavior wanderBehavior = new WanderBehavior();
+    private WanderBehavior wanderBehavior = new WanderBehavior();
 
     @Override
     public void update(Boid boid, World world, float deltaTime) {

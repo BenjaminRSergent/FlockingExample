@@ -19,7 +19,7 @@ public class FlockingApplication extends ApplicationAdapter {
     public void create() {
         batch = new SpriteBatch();
         world = new World();
-        addBoids(5000);
+        addBoids(1000);
     }
 
     private void addBoids(int numToAdd) {
@@ -49,7 +49,7 @@ public class FlockingApplication extends ApplicationAdapter {
         batch.end();
     }
 
-    public void update() {
+    private void update() {
         world.update(Gdx.graphics.getDeltaTime());
     }
 

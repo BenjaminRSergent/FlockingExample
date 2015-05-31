@@ -27,7 +27,7 @@ public class RandomSeekerBrain extends BoidAI {
         return goal.cpy().sub(boid.position).len2() < boid.getRadiusSq();
     }
 
-    public void setGoalInBounds() {
+    private void setGoalInBounds() {
         goal.x = (float) (Math.random() * (bounds.width - bounds.x) + bounds.x);
         goal.y = (float) (Math.random() * (bounds.height - bounds.y) + bounds.y);
     }

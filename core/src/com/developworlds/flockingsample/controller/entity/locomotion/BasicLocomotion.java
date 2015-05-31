@@ -3,9 +3,6 @@ package com.developworlds.flockingsample.controller.entity.locomotion;
 import com.badlogic.gdx.math.Vector2;
 import com.developworlds.flockingsample.world.entity.Boid;
 
-/**
- * Created by benjamin-sergent on 5/30/15.
- */
 public class BasicLocomotion extends Locomotion {
     private Vector2 acceleration = new Vector2();
 
