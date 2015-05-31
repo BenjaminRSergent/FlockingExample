@@ -19,7 +19,7 @@ public class FlockingApplication extends ApplicationAdapter {
     public void create() {
         batch = new SpriteBatch();
         world = new World();
-        addBoids(1);
+        addBoids(5000);
     }
 
     private void addBoids(int numToAdd) {

@@ -22,10 +22,10 @@ public class Boid {
     public Vector2 position = new Vector2();
     public Vector2 desiredVelocity = new Vector2();
     public Vector2 velocity = new Vector2();
-    public Vector2 size = new Vector2(100, 100);
+    public Vector2 size = new Vector2(10,10);
 
-    public float maxAcceleration = 1500;
-    public float maxSpeed = 500;
+    public float maxAcceleration = 200;
+    public float maxSpeed = 200;
 
     private BoidAI boidAi;
     private Locomotion locomotion;

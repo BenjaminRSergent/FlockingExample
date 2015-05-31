@@ -5,8 +5,8 @@ import com.developworlds.flockingsample.world.entity.Boid;
 
 public class WanderBehavior {
     private float circleDistance = 100;
-    private float circleRadius = 50;
-    private float maxJitterPerSec = (float) (Math.PI);
+    private float circleRadius = 90;
+    private float maxJitterPerSec = (float) (2 * Math.PI);
     private float currAngle;
 
     private Vector2 target = new Vector2();
