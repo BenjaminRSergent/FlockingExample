@@ -5,9 +5,6 @@ import com.developworlds.flockingsample.controller.entity.brain.behavior.WanderB
 import com.developworlds.flockingsample.world.World;
 import com.developworlds.flockingsample.world.entity.Boid;
 
-/**
- * Created by benjamin-sergent on 5/30/15.
- */
 public class WanderingBrain extends BoidAI {
     WanderBehavior wanderBehavior = new WanderBehavior();
 

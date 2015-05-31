@@ -14,20 +14,23 @@ public class FlockingApplication extends ApplicationAdapter {
     private SpriteBatch batch;
     private World world;
     private boolean running = false;
-    private WanderingBrain brain;
 
     @Override
     public void create() {
         batch = new SpriteBatch();
         world = new World();
-        Boid boid = new Boid();
-        boid.position.set(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
-        boid.setLocomotion(new WrappingLocomotion(new Rectangle(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight())));
-        //RandomSeekerBrain brain = new RandomSeekerBrain(new Rectangle(boid.getRadius(), boid.getRadius(), Gdx.graphics.getWidth() - boid.getRadius(), Gdx.graphics.getHeight() - boid.getRadius()));
-        brain = new WanderingBrain();
-        boid.setBoidAi(brain);
+        addBoids(1);
+    }
 
-        world.addBoid(boid);
+    private void addBoids(int numToAdd) {
+        for (int index = 0; index < numToAdd; index++) {
+            Boid boid = new Boid();
+            boid.position.set(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
+            boid.setLocomotion(new WrappingLocomotion(new Rectangle(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight())));
+            WanderingBrain brain = new WanderingBrain();
+            boid.setBoidAi(brain);
+            world.addBoid(boid);
+        }
     }
 
     @Override

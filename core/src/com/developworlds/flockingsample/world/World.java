@@ -9,6 +9,31 @@ import java.util.ArrayList;
 public class World {
     private ArrayList<Boid> boids = new ArrayList<Boid>();
 
+    public ArrayList<Boid> getBoidsInRange(Circle circle) {
+        // Naive implementation for now.
+        ArrayList<Boid> inRange = new ArrayList<Boid>(boids.size());
+        for (int index = 0; index < boids.size(); index++) {
+            Boid boid = boids.get(index);
+            if (boid.isInside(circle)) {
+                inRange.add(boid);
+            }
+        }
+
+        return inRange;
+    }
+
+    public void draw(SpriteBatch batch) {
+        for (int index = 0; index < boids.size(); index++) {
+            boids.get(index).draw(batch);
+        }
+    }
+
+    public void update(float deltaTime) {
+        for (int index = 0; index < boids.size(); index++) {
+            boids.get(index).update(this, deltaTime);
+        }
+    }
+
     public void addBoid(Boid boid) {
         boids.add(boid);
     }
@@ -19,29 +44,5 @@ public class World {
 
     public ArrayList<Boid> getBoids() {
         return boids;
-    }
-
-    public ArrayList<Boid> getBoidsInRange(Circle circle) {
-        // Naive implementation for now.
-        ArrayList<Boid> inRange = new ArrayList<Boid>(boids.size());
-        for (Boid boid : boids) {
-            if (boid.isInside(circle)) {
-                inRange.add(boid);
-            }
-        }
-
-        return inRange;
-    }
-
-    public void draw(SpriteBatch batch) {
-        for (Boid boid : boids) {
-            boid.draw(batch);
-        }
-    }
-
-    public void update(float deltaTime) {
-        for (Boid boid : boids) {
-            boid.update(this, deltaTime);
-        }
     }
 }

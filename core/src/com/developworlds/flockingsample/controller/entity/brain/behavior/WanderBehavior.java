@@ -4,15 +4,17 @@ import com.badlogic.gdx.math.Vector2;
 import com.developworlds.flockingsample.world.entity.Boid;
 
 public class WanderBehavior {
-    private float circleDistance = 500;
-    private float innerCircleRadius = 450;
-    private float outerCircleRadius = 30;
-    private float maxJitterPerSec = (float) (2 * Math.PI);
-    private float currInnerAngle;
+    private float circleDistance = 100;
+    private float circleRadius = 50;
+    private float maxJitterPerSec = (float) (Math.PI);
+    private float currAngle;
 
     private Vector2 target = new Vector2();
     private Vector2 innerPoint = new Vector2();
-    private Vector2 outerPoint = new Vector2();
+
+    public WanderBehavior() {
+        currAngle = getRandomAngle();
+    }
 
     public Vector2 getWanderTarget(Boid boid, float deltaTime) {
         float maxJitter = maxJitterPerSec * deltaTime;
@@ -20,19 +22,17 @@ public class WanderBehavior {
         target.set(boid.velocity).nor().scl(circleDistance);
         target.add(boid.position);
 
-        currInnerAngle += getJitter(maxJitter);
-        float currOuterAngle = getRandomAngle();
+        currAngle += getJitter(maxJitter);
 
-        innerPoint.set((float) Math.cos(currInnerAngle), (float) Math.sin(currInnerAngle)).scl(innerCircleRadius);
-        outerPoint.set((float) Math.cos(currOuterAngle), (float) Math.sin(currOuterAngle)).scl(outerCircleRadius);
+        innerPoint.set((float) Math.cos(currAngle), (float) Math.sin(currAngle)).scl(circleRadius + boid.getRadius());
 
-        target.add(innerPoint).add(outerPoint);
+        target.add(innerPoint);
 
         return target; // We reset this at the beginning, so we don't bother to make a copy.
     }
 
     private float getRandomAngle() {
-        return (float) (Math.random() * 4*Math.PI - 2*Math.PI);
+        return (float) (Math.random() * 2 * Math.PI);
     }
 
     private float getJitter(float maxJitter) {
@@ -40,20 +40,12 @@ public class WanderBehavior {
         return (float) ((Math.random() - 0.5) * 2 * maxJitter);
     }
 
-    public float getInnerCircleRadius() {
-        return innerCircleRadius;
+    public float getCircleRadius() {
+        return circleRadius;
     }
 
-    public void setInnerCircleRadius(float innerCircleRadius) {
-        this.innerCircleRadius = innerCircleRadius;
-    }
-
-    public float getOuterCircleRadius() {
-        return outerCircleRadius;
-    }
-
-    public void setOuterCircleRadius(float outerCircleRadius) {
-        this.outerCircleRadius = outerCircleRadius;
+    public void setCircleRadius(float circleRadius) {
+        this.circleRadius = circleRadius;
     }
 
     public float getMaxJitterPerSec() {
