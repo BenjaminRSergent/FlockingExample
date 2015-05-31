@@ -5,16 +5,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
-import com.developworlds.flockingsample.controller.entity.brain.SimpleGoalBrain;
+import com.developworlds.flockingsample.controller.entity.brain.WanderingBrain;
 import com.developworlds.flockingsample.controller.entity.locomotion.WrappingLocomotion;
 import com.developworlds.flockingsample.world.World;
 import com.developworlds.flockingsample.world.entity.Boid;
 
 public class FlockingApplication extends ApplicationAdapter {
-    SpriteBatch batch;
+    private SpriteBatch batch;
     private World world;
-    boolean running = false;
+    private boolean running = false;
+    private WanderingBrain brain;
 
     @Override
     public void create() {
@@ -22,10 +22,9 @@ public class FlockingApplication extends ApplicationAdapter {
         world = new World();
         Boid boid = new Boid();
         boid.position.set(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
-        boid.setLocomotion(new WrappingLocomotion(new Rectangle(0,0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight())));
+        boid.setLocomotion(new WrappingLocomotion(new Rectangle(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight())));
         //RandomSeekerBrain brain = new RandomSeekerBrain(new Rectangle(boid.getRadius(), boid.getRadius(), Gdx.graphics.getWidth() - boid.getRadius(), Gdx.graphics.getHeight() - boid.getRadius()));
-        SimpleGoalBrain brain = new SimpleGoalBrain();
-        brain.setGoal(new Vector2(-Gdx.graphics.getWidth() * 2, Gdx.graphics.getHeight() / 2));
+        brain = new WanderingBrain();
         boid.setBoidAi(brain);
 
         world.addBoid(boid);

@@ -1,4 +1,4 @@
-package com.developworlds.flockingsample.controller.entity.brain;
+package com.developworlds.flockingsample.controller.entity.brain.behavior;
 
 import com.badlogic.gdx.math.Vector2;
 import com.developworlds.flockingsample.world.entity.Boid;

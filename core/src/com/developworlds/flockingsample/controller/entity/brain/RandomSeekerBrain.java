@@ -20,7 +20,7 @@ public class RandomSeekerBrain extends BoidAI {
             setGoalInBounds();
         }
 
-        boid.desiredVelocity.set(Behaviors.seek(boid, goal));
+        boid.desiredVelocity.set(com.developworlds.flockingsample.controller.entity.brain.behavior.Behaviors.seek(boid, goal));
     }
 
     private boolean isCloseToGoal(Boid boid) {

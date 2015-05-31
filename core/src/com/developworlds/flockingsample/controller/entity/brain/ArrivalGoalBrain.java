@@ -11,7 +11,7 @@ public class ArrivalGoalBrain extends BoidAI {
 
 
     public void update(Boid boid, World world, float deltaTime) {
-        boid.desiredVelocity.set(Behaviors.arrive(boid, goal, slowdownRadius));
+        boid.desiredVelocity.set(com.developworlds.flockingsample.controller.entity.brain.behavior.Behaviors.arrive(boid, goal, slowdownRadius));
     }
 
     public void setGoal(Vector2 goal) {

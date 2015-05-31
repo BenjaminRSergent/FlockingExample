@@ -9,7 +9,7 @@ public class SimpleGoalBrain extends BoidAI {
     private Vector2 desiredVelocity = new Vector2();
 
     public void update(Boid boid, World world, float deltaTime) {
-        boid.desiredVelocity.set(boid.desiredVelocity.set(Behaviors.seek(boid, goal)));
+        boid.desiredVelocity.set(boid.desiredVelocity.set(com.developworlds.flockingsample.controller.entity.brain.behavior.Behaviors.seek(boid, goal)));
     }
 
     public void setGoal(Vector2 goal) {
