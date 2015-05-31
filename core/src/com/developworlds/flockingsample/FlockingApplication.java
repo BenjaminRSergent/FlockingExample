@@ -4,14 +4,16 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.developworlds.flockingsample.controller.entity.BasicLocomotion;
+import com.badlogic.gdx.math.Vector2;
+import com.developworlds.flockingsample.controller.entity.brain.ArrivalGoalBrain;
+import com.developworlds.flockingsample.controller.entity.locomotion.BasicLocomotion;
 import com.developworlds.flockingsample.world.World;
 import com.developworlds.flockingsample.world.entity.Boid;
 
 public class FlockingApplication extends ApplicationAdapter {
     SpriteBatch batch;
     private World world;
-
+    boolean running = false;
 
     @Override
     public void create() {
@@ -19,15 +21,22 @@ public class FlockingApplication extends ApplicationAdapter {
         world = new World();
         Boid boid = new Boid();
         boid.position.set(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
-        boid.goal.set(0, 0);
         boid.setLocomotion(new BasicLocomotion());
+        ArrivalGoalBrain brain = new ArrivalGoalBrain();
+        boid.setBoidAi(brain);
+        brain.setGoal(new Vector2(Gdx.graphics.getWidth() / 4, Gdx.graphics.getHeight() / 4));
 
         world.addBoid(boid);
     }
 
     @Override
     public void render() {
-        update();
+        if(Gdx.input.justTouched()) {
+            running = !running;
+        }
+        if(running) {
+            update();
+        }
 
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);

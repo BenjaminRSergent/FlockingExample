@@ -1,4 +1,4 @@
-package com.developworlds.flockingsample.controller.entity;
+package com.developworlds.flockingsample.controller.entity.brain;
 
 import com.developworlds.flockingsample.world.World;
 import com.developworlds.flockingsample.world.entity.Boid;

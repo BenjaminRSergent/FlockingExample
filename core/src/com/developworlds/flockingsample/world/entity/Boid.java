@@ -5,38 +5,47 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
-import com.developworlds.flockingsample.controller.entity.BoidAI;
-import com.developworlds.flockingsample.controller.entity.Locomotion;
+import com.developworlds.flockingsample.controller.entity.brain.BoidAI;
+import com.developworlds.flockingsample.controller.entity.locomotion.Locomotion;
+import com.developworlds.flockingsample.utility.LowPassFilter;
 import com.developworlds.flockingsample.view.TextureManager;
 import com.developworlds.flockingsample.world.World;
 
 public class Boid {
     private static final String BOID_TEXTURE = "simple_boid.png";
+    private static final float MIN_FACING_VELO = 1;
     private Sprite sprite;
 
     public Color color = Color.BLUE;
     public Vector2 position = new Vector2();
-    public Vector2 goal = new Vector2();
-    public Vector2 size = new Vector2(30, 30);
+    public Vector2 desiredVelocity = new Vector2();
+    public Vector2 velocity = new Vector2();
+    public Vector2 size = new Vector2(100, 100);
 
-    public float maxSpeed = 100;
-    public float currSpeed = maxSpeed;
+    public float maxAcceleration = 500;
+    public float maxSpeed = 500;
 
     private BoidAI boidAi;
     private Locomotion locomotion;
     private float facingRotation;
     private BoidType type = BoidType.Basic;
+    private LowPassFilter facingFilter = new LowPassFilter(0.1f);
 
     public Boid() {
         sprite = new Sprite(TextureManager.get().getTexture(BOID_TEXTURE));
     }
 
     public void update(World world, float deltaTime) {
-        if(boidAi != null) {
+        if (boidAi != null) {
             boidAi.update(this, world, deltaTime);
         }
         if (locomotion != null) {
             locomotion.update(this, deltaTime);
+        }
+
+        if (velocity.len2() > MIN_FACING_VELO) {
+            facingFilter.addValue(velocity.angle() - 90);
+            facingRotation = facingFilter.get();
         }
     }
 
@@ -57,10 +66,6 @@ public class Boid {
         this.locomotion = locomotion;
     }
 
-    public void setFacingRotation(float rotation) {
-        facingRotation = rotation;
-    }
-
     public float getFacingRotation() {
         return facingRotation;
     }
@@ -71,5 +76,14 @@ public class Boid {
 
     public BoidType getType() {
         return type;
+    }
+
+    public boolean isDistSqInside(float distSq) {
+        // Is the distance squared less than the square of the smallest size.
+        return distSq < Math.pow(Math.min(size.x, size.y), 2);
+    }
+
+    public float getDistanceSqTo(Vector2 goal) {
+        return goal.cpy().sub(position).len2();
     }
 }
