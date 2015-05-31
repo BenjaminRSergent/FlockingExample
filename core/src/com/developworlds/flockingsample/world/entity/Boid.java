@@ -86,4 +86,12 @@ public class Boid {
     public float getDistanceSqTo(Vector2 goal) {
         return goal.cpy().sub(position).len2();
     }
+
+    public float getRadiusSq() {
+        return (float) Math.pow(getRadius(), 2.0f);
+    }
+
+    public float getRadius() {
+        return Math.max(size.x, size.y);
+    }
 }
