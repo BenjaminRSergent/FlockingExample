@@ -10,7 +10,7 @@ public class SimpleGoalBrain extends BoidAI {
     private Vector2 desiredVelocity = new Vector2();
 
     public void update(Boid boid, World world, float deltaTime) {
-        boid.desiredVelocity.set(SteeringMethods.seek(boid, goal, boid.desiredVelocity));
+        SteeringMethods.seek(boid, goal, boid.acceleration);
     }
 
     public void setGoal(Vector2 goal) {

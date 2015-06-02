@@ -2,22 +2,24 @@ package com.developworlds.flockingsample.controller.entity.behavior.goals;
 
 import com.badlogic.gdx.math.Vector2;
 import com.developworlds.flockingsample.FlockingApplication;
+import com.developworlds.flockingsample.controller.entity.behavior.steering.SteeringMethods;
 import com.developworlds.flockingsample.world.World;
 import com.developworlds.flockingsample.world.entity.Boid;
 
-public class WanderBehavior implements Behavior{
+public class WanderBehavior implements Behavior {
     private float circleDistance = 100;
     private float circleRadius = 90;
-    private float maxJitterPerSec = (float) (2 * Math.PI);
+    private float maxJitterPerSec = (float) (4 * Math.PI);
     private float currAngle;
 
     public WanderBehavior() {
         currAngle = getRandomAngle();
     }
 
-    public Vector2 getTarget(Boid boid, World world, float deltaTime, Vector2 target) {
+    public Vector2 getSteeringForce(Boid boid, World world, float deltaTime, Vector2 force) {
         float maxJitter = maxJitterPerSec * deltaTime;
 
+        Vector2 target = FlockingApplication.vectorPool.obtain();
         target.set(boid.velocity).nor().scl(circleDistance);
         target.add(boid.position);
 
@@ -29,8 +31,11 @@ public class WanderBehavior implements Behavior{
         target.add(innerPoint);
 
         FlockingApplication.vectorPool.free(innerPoint);
+        FlockingApplication.vectorPool.free(target);
 
-        return target;
+        SteeringMethods.seek(boid, target, force);
+
+        return force;
     }
 
     private float getRandomAngle() {

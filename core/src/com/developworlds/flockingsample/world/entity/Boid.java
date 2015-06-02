@@ -20,18 +20,19 @@ public class Boid {
 
     public Color color = Color.BLUE;
     public Vector2 position = new Vector2();
-    public Vector2 desiredVelocity = new Vector2();
     public Vector2 velocity = new Vector2();
-    public Vector2 size = new Vector2(10, 10);
+    public Vector2 acceleration = new Vector2();
+    public Vector2 size = new Vector2(25, 25);
 
-    public float maxAcceleration = 100;
-    public float maxSpeed = 150;
+    public float maxAcceleration = 400;
+    public float maxSpeed = 200;
 
     private BoidAI boidAi;
     private Locomotion locomotion;
     private float facingRotation;
     private BoidType type = BoidType.Basic;
     private LowPassFilter facingSmoother = new LowPassFilter(0.1f);
+
 
     public Boid() {
         sprite = new Sprite(TextureManager.get().getTexture(BOID_TEXTURE));

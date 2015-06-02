@@ -1,33 +1,55 @@
 package com.developworlds.flockingsample.controller.entity.behavior.goals;
 
 import com.badlogic.gdx.math.Vector2;
+import com.developworlds.flockingsample.FlockingApplication;
+import com.developworlds.flockingsample.controller.entity.behavior.steering.SteeringMethods;
 import com.developworlds.flockingsample.world.World;
 import com.developworlds.flockingsample.world.entity.Boid;
 
-public class AvoidEdgeBehavior implements Behavior{
+public class AvoidEdgeBehavior implements Behavior {
     float tooClose = 300;
 
-    public Vector2 getTarget(Boid boid, World world, float deltaTime, Vector2 target) {
+    public Vector2 getSteeringForce(Boid boid, World world, float deltaTime, Vector2 force) {
+        Vector2 target = FlockingApplication.vectorPool.obtain();
         target.set(boid.position);
-        if(boid.position.x < tooClose) {
-            target.add(1000, 0);
+
+        float distanceFromTrigger = 0;
+
+        float targetDist = boid.getRadius() * 2;
+        if (boid.position.x < tooClose) {
+            target.add(targetDist, 0);
+            distanceFromTrigger = tooClose - boid.position.x;
         }
 
-        if(boid.position.y < tooClose) {
-            target.add(0, 1000);
+        if (boid.position.y < tooClose) {
+            target.add(0, targetDist);
+            distanceFromTrigger = Math.max(distanceFromTrigger, tooClose - boid.position.y);
         }
 
-        if(boid.position.x > world.getBounds().width - tooClose) {
-            target.add(-1000, 0);
+        if (boid.position.x > world.getBounds().width - tooClose) {
+            target.add(-targetDist, 0);
+            distanceFromTrigger = Math.max(distanceFromTrigger, boid.position.x - (world.getBounds().width - tooClose));
         }
 
-        if(boid.position.y > world.getBounds().height -  tooClose) {
-            target.add(0, -1000);
+        if (boid.position.y > world.getBounds().height - tooClose) {
+            target.add(0, -targetDist);
+            distanceFromTrigger = Math.max(distanceFromTrigger, boid.position.y - (world.getBounds().height - tooClose));
         }
 
-        return target;
+        if (distanceFromTrigger == 0) {
+            force.set(0, 0);
+            return force;
+        }
+
+        SteeringMethods.seek(boid, target, force);
+
+        FlockingApplication.vectorPool.free(target);
+
+        float forceScale = (distanceFromTrigger) / tooClose;
+        force.scl(forceScale);
+
+        return force;
     }
-
 
 
 }

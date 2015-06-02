@@ -37,7 +37,7 @@ public class FlockingApplication extends ApplicationAdapter {
         for (int index = 0; index < numToAdd; index++) {
             Boid boid = new Boid();
             boid.position.set((float) (Gdx.graphics.getWidth() * Math.random()), (float) (Gdx.graphics.getHeight() * Math.random()));
-            boid.setLocomotion(new WrappingLocomotion(new Rectangle(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight())));
+            boid.setLocomotion(new WrappingLocomotion(world.getBounds()));
             BoidAI brain = new WanderingFlockBrain();
             boid.setBoidAi(brain);
             world.addBoid(boid);
@@ -48,7 +48,7 @@ public class FlockingApplication extends ApplicationAdapter {
     public void render() {
         if (Gdx.input.justTouched()) {
             if(!running) {
-                addBoids(1000);
+                addBoids(150);
             }
             running = !running;
         }

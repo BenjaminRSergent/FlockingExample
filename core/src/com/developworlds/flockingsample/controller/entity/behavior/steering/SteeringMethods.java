@@ -20,9 +20,9 @@ public class SteeringMethods {
             return desiredVelocity;
         }
 
-        float desiredSpeed = boid.maxSpeed;
+        float desiredSpeed = boid.maxAcceleration;
         if (dist < slowdownRadius) {
-            desiredSpeed = boid.maxSpeed * ((slowdownRadius - dist) / slowdownRadius);
+            desiredSpeed = boid.maxAcceleration * ((slowdownRadius - dist) / slowdownRadius);
         }
 
 
@@ -32,7 +32,7 @@ public class SteeringMethods {
             desiredVelocity.scl(1 / dist).scl(desiredSpeed);
         }
 
-        return desiredVelocity;
+        return desiredVelocity.sub(boid.velocity);
     }
 
     public static Vector2 depart(Boid boid, Vector2 antiGoal, float slowdownRadius, float farEnough, Vector2 desiredVelocity) {
@@ -41,10 +41,10 @@ public class SteeringMethods {
 
         float dist = desiredVelocity.len();
 
-        float desiredSpeed = boid.maxSpeed;
+        float desiredSpeed = boid.maxAcceleration;
 
         if (dist > slowdownRadius) {
-            desiredSpeed = boid.maxSpeed * ((farEnough - dist) / (farEnough - slowdownRadius));
+            desiredSpeed = boid.maxAcceleration * ((farEnough - dist) / (farEnough - slowdownRadius));
         }
 
 
@@ -54,7 +54,7 @@ public class SteeringMethods {
             desiredVelocity.scl(1 / dist).scl(desiredSpeed);
         }
 
-        return desiredVelocity;
+        return desiredVelocity.sub(boid.velocity);
     }
 
     public static Vector2 flee(Boid boid, Vector2 antiGoal, Vector2 desiredVelocity) {
@@ -64,7 +64,6 @@ public class SteeringMethods {
     public static Vector2 seek(Boid boid, Vector2 goal, Vector2 desiredVelocity) {
         float closeEnough = Math.max(boid.size.x, boid.size.y);
 
-
         desiredVelocity.set(goal);
         desiredVelocity.sub(boid.position);
 
@@ -72,12 +71,14 @@ public class SteeringMethods {
 
         if (dist < closeEnough) {
             // Desire to stop
-            return desiredVelocity;
+            desiredVelocity.set(boid.velocity).scl(-1);
         }
 
-        float desiredSpeed = boid.maxSpeed;
+        desiredVelocity.sub(boid.velocity);
+        dist = desiredVelocity.len();
 
-        // Desire to go in the direction of the goal as fast as possible
+        float desiredSpeed = boid.maxAcceleration;
+
         if (dist > 0) {
             desiredVelocity.scl(1 / dist).scl(desiredSpeed);
         }

@@ -5,5 +5,5 @@ import com.developworlds.flockingsample.world.World;
 import com.developworlds.flockingsample.world.entity.Boid;
 
 public interface Behavior {
-    public Vector2 getTarget(Boid boid, World world, float deltaTime, Vector2 target);
+    public Vector2 getSteeringForce(Boid boid, World world, float deltaTime, Vector2 target);
 }

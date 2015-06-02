@@ -21,7 +21,7 @@ public class RandomSeekerBrain extends BoidAI {
             setGoalInBounds();
         }
 
-        SteeringMethods.seek(boid, goal, boid.desiredVelocity);
+        SteeringMethods.seek(boid, goal, boid.acceleration);
     }
 
     private boolean isCloseToGoal(Boid boid) {

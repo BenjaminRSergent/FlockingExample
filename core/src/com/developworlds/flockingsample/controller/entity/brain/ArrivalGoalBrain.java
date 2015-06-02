@@ -10,7 +10,7 @@ public class ArrivalGoalBrain extends BoidAI {
     private float slowdownRadius = 250;
 
     public void update(Boid boid, World world, float deltaTime) {
-        SteeringMethods.arrive(boid, goal, slowdownRadius, boid.desiredVelocity);
+        SteeringMethods.arrive(boid, goal, slowdownRadius, boid.acceleration);
     }
 
     public void setGoal(Vector2 goal) {

@@ -7,7 +7,6 @@ import com.developworlds.flockingsample.controller.entity.behavior.goals.AvoidEd
 import com.developworlds.flockingsample.controller.entity.behavior.goals.FlockingBehavior;
 import com.developworlds.flockingsample.controller.entity.behavior.goals.MatchHeadingBehavior;
 import com.developworlds.flockingsample.controller.entity.behavior.goals.WanderBehavior;
-import com.developworlds.flockingsample.controller.entity.behavior.steering.SteeringMethods;
 import com.developworlds.flockingsample.world.World;
 import com.developworlds.flockingsample.world.entity.Boid;
 
@@ -18,7 +17,9 @@ public class WanderingFlockBrain extends BoidAI {
     WanderBehavior wanderingBehavior = new WanderBehavior();
     AvoidEdgeBehavior avoidEdgeBehavior = new AvoidEdgeBehavior();
 
-
+    float flockScale = 0.6f;
+    float wanderScale = 0.3f;
+    float avoidScale = 0.7f;
 
     public void update(Boid boid, World world, float deltaTime) {
         Vector2 flockCenter = FlockingApplication.vectorPool.obtain();
@@ -27,40 +28,87 @@ public class WanderingFlockBrain extends BoidAI {
         Vector2 avoidTarget = FlockingApplication.vectorPool.obtain();
         Vector2 tmpVector = FlockingApplication.vectorPool.obtain();
 
-        flockingBehavior.getTarget(boid, world, deltaTime, flockCenter);
-        wanderingBehavior.getTarget(boid, world, deltaTime, wanderTarget);
-        headingBehavior.getTarget(boid, world, deltaTime, headingTarget);
-        avoidEdgeBehavior.getTarget(boid, world, deltaTime, avoidTarget);
+        boid.acceleration.set(0, 0);
 
-        tmpVector.set(0, 0);
-        if (!flockCenter.epsilonEquals(boid.position, 0.01f)) {
-            SteeringMethods.arrive(boid, flockCenter, SLOW_DOWN_RADIUS, boid.desiredVelocity);
-            tmpVector.add(boid.desiredVelocity);
+        float accelerationLeft = boid.maxAcceleration;
+
+        avoidEdgeBehavior.getSteeringForce(boid, world, deltaTime, avoidTarget);
+        boid.acceleration.add(avoidTarget.scl(avoidScale));
+
+        accelerationLeft = boid.maxAcceleration - boid.acceleration.len();
+
+        boolean accelMaxed = isAccelMax(boid);
+
+
+        if (!accelMaxed) {
+            wanderingBehavior.getSteeringForce(boid, world, deltaTime, wanderTarget);
+
+            wanderTarget.scl(wanderScale);
+            float amount = headingTarget.len();
+
+            if (accelerationLeft < amount) {
+                wanderTarget.nor().scl(accelerationLeft);
+                amount = accelerationLeft;
+            }
+
+
+            accelMaxed |= isAccelMax(boid);
+
+            boid.acceleration.add(wanderTarget);
+            accelerationLeft = boid.maxAcceleration - boid.acceleration.len();
         }
 
-        if (!headingTarget.epsilonEquals(boid.position, 0.01f)) {
-            SteeringMethods.seek(boid, headingTarget, boid.desiredVelocity);
-            tmpVector.add(boid.desiredVelocity);
+        if (!accelMaxed) {
+            flockingBehavior.getSteeringForce(boid, world, deltaTime, flockCenter);
+
+            flockCenter.scl(flockScale);
+            float amount = flockCenter.len();
+
+            if (accelerationLeft < amount) {
+                wanderTarget.nor().scl(accelerationLeft);
+                amount = accelerationLeft;
+            }
+
+
+            boid.acceleration.add(flockCenter);
+            accelerationLeft = boid.maxAcceleration - boid.acceleration.len();
+            accelMaxed |= isAccelMax(boid);
         }
 
-        if (!avoidTarget.epsilonEquals(boid.position, 0.01f)) {
-            SteeringMethods.seek(boid, avoidTarget, boid.desiredVelocity);
-            tmpVector.add(boid.desiredVelocity.scl(1.3f));
+
+        if (!accelMaxed) {
+            headingBehavior.getSteeringForce(boid, world, deltaTime, headingTarget);
+
+            headingTarget.scl(flockScale);
+            float amount = headingTarget.len();
+
+            if (accelerationLeft < amount) {
+                wanderTarget.nor().scl(accelerationLeft);
+                amount = accelerationLeft;
+            }
+
+
+
+
+            boid.acceleration.add(headingTarget);
+            accelerationLeft = boid.maxAcceleration - boid.acceleration.len();
+            accelMaxed |= isAccelMax(boid);
         }
 
-        SteeringMethods.arrive(boid, wanderTarget, SLOW_DOWN_RADIUS, boid.desiredVelocity);
-
-        tmpVector.add(boid.desiredVelocity.scl(1.5f));
-
-        tmpVector.nor().scl(boid.maxSpeed);
-
-        boid.desiredVelocity.set(tmpVector);
+        if (boid.acceleration.x == 0 && boid.acceleration.y == 0) {
+            int x = 0;
+            System.out.print(x);
+        }
 
         FlockingApplication.vectorPool.free(flockCenter);
         FlockingApplication.vectorPool.free(wanderTarget);
         FlockingApplication.vectorPool.free(headingTarget);
         FlockingApplication.vectorPool.free(avoidTarget);
         FlockingApplication.vectorPool.free(tmpVector);
+    }
+
+    private boolean isAccelMax(Boid boid) {
+        return boid.maxAcceleration * boid.maxAcceleration < boid.acceleration.len2();
     }
 
 }
