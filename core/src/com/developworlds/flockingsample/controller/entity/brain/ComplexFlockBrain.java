@@ -3,6 +3,7 @@ package com.developworlds.flockingsample.controller.entity.brain;
 
 import com.badlogic.gdx.math.Vector2;
 import com.developworlds.flockingsample.controller.entity.behavior.goals.AvoidEdgeBehavior;
+import com.developworlds.flockingsample.controller.entity.behavior.goals.Behavior;
 import com.developworlds.flockingsample.controller.entity.behavior.goals.FlockingBehavior;
 import com.developworlds.flockingsample.controller.entity.behavior.goals.MatchHeadingBehavior;
 import com.developworlds.flockingsample.controller.entity.behavior.goals.SeperationBehavior;
@@ -23,75 +24,35 @@ public class ComplexFlockBrain extends BoidAI {
     float avoidScale = 0.9f;
     float seperationScale = 0.9f;
 
-    Vector2 flockCenter = new Vector2();
-    Vector2 wanderForce = new Vector2();
-    Vector2 seperationForce = new Vector2();
-    Vector2 headingForce = new Vector2();
-    Vector2 avoidForce = new Vector2();
     Vector2 tmpVector = new Vector2();
 
     public void update(Boid boid, World world, float deltaTime) {
         boid.acceleration.set(0, 0);
 
-        avoidEdgeBehavior.getSteeringForce(boid, world, deltaTime, avoidForce);
-        boid.acceleration.add(avoidForce.scl(avoidScale));
+        float accelerationLeft = getAccelerationLeft(boid);
+        addBehavior(avoidEdgeBehavior, boid, world, deltaTime, avoidScale, accelerationLeft);
+        addBehavior(seperationBehavior, boid, world, deltaTime, avoidScale, accelerationLeft);
+        addBehavior(wanderingBehavior, boid, world, deltaTime, avoidScale, accelerationLeft);
+        addBehavior(headingBehavior, boid, world, deltaTime, avoidScale, accelerationLeft);
+        addBehavior(flockingBehavior, boid, world, deltaTime, avoidScale, accelerationLeft);
+    }
 
-        float accelerationLeft = boid.maxAcceleration - boid.acceleration.len();
+    private float getAccelerationLeft(Boid boid) {
+        return boid.maxAcceleration - boid.acceleration.len();
+    }
 
+    public void addBehavior(Behavior behavior, Boid boid, World world, float deltaTime, float scale, float accelerationLeft) {
         if (accelerationLeft > 0) {
-            seperationBehavior.getSteeringForce(boid, world, deltaTime, seperationForce);
-            boid.acceleration.add(seperationForce.scl(seperationScale));
-
-            float amount = seperationForce.len();
+            behavior.getSteeringForce(boid, world, deltaTime, tmpVector);
+            tmpVector.scl(scale);
+            float amount = tmpVector.len();
 
             if (accelerationLeft < amount) {
-                seperationForce.nor().scl(accelerationLeft);
+                tmpVector.nor().scl(accelerationLeft);
             }
 
-            boid.acceleration.add(seperationForce);
-            accelerationLeft = boid.maxAcceleration - boid.acceleration.len();
-        }
 
-        if (accelerationLeft > 0) {
-            wanderingBehavior.getSteeringForce(boid, world, deltaTime, wanderForce);
-
-            wanderForce.scl(wanderScale);
-            float amount = headingForce.len();
-
-            if (accelerationLeft < amount) {
-                wanderForce.nor().scl(accelerationLeft);
-            }
-
-            boid.acceleration.add(wanderForce);
-            accelerationLeft = boid.maxAcceleration - boid.acceleration.len();
-        }
-
-        if (accelerationLeft > 0) {
-            flockingBehavior.getSteeringForce(boid, world, deltaTime, flockCenter);
-
-            flockCenter.scl(flockScale);
-            float amount = flockCenter.len();
-
-            if (accelerationLeft < amount) {
-                wanderForce.nor().scl(accelerationLeft);
-            }
-
-            boid.acceleration.add(flockCenter);
-            accelerationLeft = boid.maxAcceleration - boid.acceleration.len();
-        }
-
-
-        if (accelerationLeft > 0) {
-            headingBehavior.getSteeringForce(boid, world, deltaTime, headingForce);
-
-            headingForce.scl(flockScale);
-            float amount = headingForce.len();
-
-            if (accelerationLeft < amount) {
-                wanderForce.nor().scl(accelerationLeft);
-            }
-
-            boid.acceleration.add(headingForce);
+            boid.acceleration.add(tmpVector);
         }
     }
 
