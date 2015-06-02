@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.developworlds.flockingsample.controller.entity.brain.BoidAI;
 import com.developworlds.flockingsample.controller.entity.brain.WanderingFlockBrain;
-import com.developworlds.flockingsample.controller.entity.locomotion.WrappingLocomotion;
+import com.developworlds.flockingsample.controller.entity.locomotion.BasicLocomotion;
 import com.developworlds.flockingsample.world.World;
 import com.developworlds.flockingsample.world.entity.Boid;
 
@@ -28,7 +28,7 @@ public class FlockingApplication extends ApplicationAdapter {
         for (int index = 0; index < numToAdd; index++) {
             Boid boid = new Boid();
             boid.position.set((float) (Gdx.graphics.getWidth() * Math.random()), (float) (Gdx.graphics.getHeight() * Math.random()));
-            boid.setLocomotion(new WrappingLocomotion(world.getBounds()));
+            boid.setLocomotion(new BasicLocomotion());
             BoidAI brain = new WanderingFlockBrain();
             boid.setBoidAi(brain);
             world.addBoid(boid);
@@ -39,7 +39,7 @@ public class FlockingApplication extends ApplicationAdapter {
     public void render() {
         if (Gdx.input.justTouched()) {
             if(!running) {
-                addBoids(150);
+                addBoids(300);
             }
             running = true;
         }
@@ -54,9 +54,15 @@ public class FlockingApplication extends ApplicationAdapter {
         batch.end();
     }
 
+    float accumulator = 0;
+    final float SEC_PER_FRAME = 1/30.0f;
     private void update() {
+        accumulator += Gdx.graphics.getDeltaTime();
         try {
-            world.update(Gdx.graphics.getDeltaTime());
+            while(accumulator > SEC_PER_FRAME) {
+                world.update(SEC_PER_FRAME);
+                accumulator -= SEC_PER_FRAME;
+            }
         }catch (Exception ex) {
 
             Gdx.app.log("UPDATE", "Update error " + ex, ex);

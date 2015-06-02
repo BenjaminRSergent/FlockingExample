@@ -6,9 +6,10 @@ import com.developworlds.flockingsample.world.World;
 import com.developworlds.flockingsample.world.entity.Boid;
 
 public class AvoidEdgeBehavior implements Behavior {
-    float tooClose = 300;
+    float tooClose = Boid.DEF_SIZE * 10;
 
     Vector2 target = new Vector2();
+
     public Vector2 getSteeringForce(Boid boid, World world, float deltaTime, Vector2 force) {
         target.set(boid.position);
 

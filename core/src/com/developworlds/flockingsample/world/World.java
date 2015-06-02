@@ -117,17 +117,31 @@ public class World {
 
 
     private void addToCell(Boid boid) {
-        int cellX = (int) (boid.position.x / DEF_CELL_SIZE);
-        int cellY = (int) (boid.position.y / DEF_CELL_SIZE);
+        Cell cell = getCellAtPosition(boid.position);
 
-        cells[cellX][cellY].add(boid);
+        if(cell != null) {
+            cell.add(boid);
+        }
     }
 
     private void removeFromCell(Boid boid) {
-        int cellX = (int) (boid.position.x / DEF_CELL_SIZE);
-        int cellY = (int) (boid.position.y / DEF_CELL_SIZE);
+        Cell cell = getCellAtPosition(boid.position);
 
-        cells[cellX][cellY].remove(boid);
+        if(cell != null) {
+            cell.remove(boid);
+        }
+    }
+
+    private Cell getCellAtPosition(Vector2 position) {
+        int cellX = (int) (position.x / DEF_CELL_SIZE);
+        int cellY = (int) (position.y / DEF_CELL_SIZE);
+
+        if(cellX > 0 && cellX < cells.length
+                && cellY > 0 && cellY < cells[0].length) {
+            return cells[cellX][cellY];
+        }
+
+        return null;
     }
 
 
