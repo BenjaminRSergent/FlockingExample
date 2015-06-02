@@ -29,19 +29,15 @@ public class ComplexFlockBrain extends BoidAI {
     public void update(Boid boid, World world, float deltaTime) {
         boid.acceleration.set(0, 0);
 
+        integrateBehavior(avoidEdgeBehavior, boid, world, deltaTime, avoidScale);
+        integrateBehavior(seperationBehavior, boid, world, deltaTime, avoidScale);
+        integrateBehavior(wanderingBehavior, boid, world, deltaTime, avoidScale);
+        integrateBehavior(headingBehavior, boid, world, deltaTime, avoidScale);
+        integrateBehavior(flockingBehavior, boid, world, deltaTime, avoidScale);
+    }
+
+    public void integrateBehavior(Behavior behavior, Boid boid, World world, float deltaTime, float scale) {
         float accelerationLeft = getAccelerationLeft(boid);
-        addBehavior(avoidEdgeBehavior, boid, world, deltaTime, avoidScale, accelerationLeft);
-        addBehavior(seperationBehavior, boid, world, deltaTime, avoidScale, accelerationLeft);
-        addBehavior(wanderingBehavior, boid, world, deltaTime, avoidScale, accelerationLeft);
-        addBehavior(headingBehavior, boid, world, deltaTime, avoidScale, accelerationLeft);
-        addBehavior(flockingBehavior, boid, world, deltaTime, avoidScale, accelerationLeft);
-    }
-
-    private float getAccelerationLeft(Boid boid) {
-        return boid.maxAcceleration - boid.acceleration.len();
-    }
-
-    public void addBehavior(Behavior behavior, Boid boid, World world, float deltaTime, float scale, float accelerationLeft) {
         if (accelerationLeft > 0) {
             behavior.getSteeringForce(boid, world, deltaTime, tmpVector);
             tmpVector.scl(scale);
@@ -50,10 +46,12 @@ public class ComplexFlockBrain extends BoidAI {
             if (accelerationLeft < amount) {
                 tmpVector.nor().scl(accelerationLeft);
             }
-
-
+            
             boid.acceleration.add(tmpVector);
         }
     }
 
+    private float getAccelerationLeft(Boid boid) {
+        return boid.maxAcceleration - boid.acceleration.len();
+    }
 }
