@@ -8,11 +8,9 @@ import com.developworlds.flockingsample.world.entity.Boid;
 
 import java.util.List;
 
-/**
- * Created by benjamin-sergent on 6/2/15.
- */
+
 public class MatchHeadingBehavior implements Behavior {
-    float DEF_RADIUS = 150;
+    float DEF_RADIUS = Boid.DEF_SIZE*4;
     Circle range = new Circle();
 
     public MatchHeadingBehavior() {
@@ -45,7 +43,7 @@ public class MatchHeadingBehavior implements Behavior {
             return force;
         }
 
-        target.scl(boid.getRadius() * 2).add(boid.position);
+        target.nor().scl(boid.getRadius() * 10).add(boid.position);
 
         SteeringMethods.seek(boid, target, force);
 
