@@ -7,15 +7,16 @@ import com.badlogic.gdx.math.Vector2;
 import com.developworlds.flockingsample.world.entity.Boid;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class World {
-    private static final int DEF_CELL_SIZE = Boid.DEF_SIZE * 3;
+    private static final int DEF_CELL_SIZE = Boid.DEF_SIZE * 2;
 
     class Cell {
         private Vector2 position;
         private int size;
-        private List<Boid> boidsInCell = new ArrayList<Boid>(100);
+        private List<Boid> boidsInCell = new LinkedList<Boid>();
 
         public Cell(Vector2 position, int size) {
             this.position = position.cpy();
@@ -109,9 +110,22 @@ public class World {
         int size = boids.size();
         for (int index = 0; index < size; index++) {
             Boid boid = boids.get(index);
-            removeFromCell(boid);
+            Cell startCell = getCellAtPosition(boid.position);
             boid.update(this, deltaTime);
-            addToCell(boid);
+            Cell endCell = getCellAtPosition(boid.position);
+
+            if (startCell == null && endCell == null) {
+                continue;
+            }
+
+            if (startCell != null && endCell == null) {
+                startCell.remove(boid);
+            } else if (startCell == null && endCell != null) {
+                endCell.add(boid);
+            } else if (!startCell.equals(endCell)) {
+                startCell.remove(boid);
+                endCell.add(boid);
+            }
         }
     }
 
@@ -119,7 +133,7 @@ public class World {
     private void addToCell(Boid boid) {
         Cell cell = getCellAtPosition(boid.position);
 
-        if(cell != null) {
+        if (cell != null) {
             cell.add(boid);
         }
     }
@@ -127,7 +141,7 @@ public class World {
     private void removeFromCell(Boid boid) {
         Cell cell = getCellAtPosition(boid.position);
 
-        if(cell != null) {
+        if (cell != null) {
             cell.remove(boid);
         }
     }
@@ -136,7 +150,7 @@ public class World {
         int cellX = (int) (position.x / DEF_CELL_SIZE);
         int cellY = (int) (position.y / DEF_CELL_SIZE);
 
-        if(cellX > 0 && cellX < cells.length
+        if (cellX > 0 && cellX < cells.length
                 && cellY > 0 && cellY < cells[0].length) {
             return cells[cellX][cellY];
         }

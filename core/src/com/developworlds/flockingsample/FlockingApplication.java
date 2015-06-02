@@ -44,7 +44,7 @@ public class FlockingApplication extends ApplicationAdapter {
 
         if (Gdx.input.justTouched()) {
             if (!running) {
-                addBoids(300);
+                addBoids(400);
             }
             running = true;
         }
@@ -75,7 +75,8 @@ public class FlockingApplication extends ApplicationAdapter {
                     Gdx.app.log("UPDATE", "Update error " + ex, ex);
                 }
                 try {
-                    Thread.sleep((long) (SEC_PER_FRAME / 2 * 1000));
+
+                    Thread.sleep((long) (2)); // Minisleep to avoid fully hogging resources.
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
