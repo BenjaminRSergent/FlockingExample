@@ -24,91 +24,80 @@ public class WanderingFlockBrain extends BoidAI {
     float seperationScale = 0.9f;
 
     Vector2 flockCenter = new Vector2();
-    Vector2 wanderTarget = new Vector2();
-    Vector2 seperationTarget = new Vector2();
-    Vector2 headingTarget = new Vector2();
-    Vector2 avoidTarget = new Vector2();
+    Vector2 wanderForce = new Vector2();
+    Vector2 seperationForce = new Vector2();
+    Vector2 headingForce = new Vector2();
+    Vector2 avoidForce = new Vector2();
     Vector2 tmpVector = new Vector2();
 
     public void update(Boid boid, World world, float deltaTime) {
         boid.acceleration.set(0, 0);
 
-        float accelerationLeft = boid.maxAcceleration;
+        avoidEdgeBehavior.getSteeringForce(boid, world, deltaTime, avoidForce);
+        boid.acceleration.add(avoidForce.scl(avoidScale));
 
-        avoidEdgeBehavior.getSteeringForce(boid, world, deltaTime, avoidTarget);
-        boid.acceleration.add(avoidTarget.scl(avoidScale));
+        float accelerationLeft = boid.maxAcceleration - boid.acceleration.len();
 
-        accelerationLeft = boid.maxAcceleration - boid.acceleration.len();
+        if (accelerationLeft > 0) {
+            seperationBehavior.getSteeringForce(boid, world, deltaTime, seperationForce);
+            boid.acceleration.add(seperationForce.scl(seperationScale));
 
-        boolean accelMaxed = isAccelMax(boid);
-
-        if (!accelMaxed) {
-            seperationBehavior.getSteeringForce(boid, world, deltaTime, seperationTarget);
-            boid.acceleration.add(seperationTarget.scl(seperationScale));
-
-            float amount = seperationTarget.len();
+            float amount = seperationForce.len();
 
             if (accelerationLeft < amount) {
-                seperationTarget.nor().scl(accelerationLeft);
+                seperationForce.nor().scl(accelerationLeft);
             }
 
-            boid.acceleration.add(seperationTarget);
-            accelMaxed |= isAccelMax(boid);
+            boid.acceleration.add(seperationForce);
             accelerationLeft = boid.maxAcceleration - boid.acceleration.len();
         }
 
-        if (!accelMaxed) {
-            wanderingBehavior.getSteeringForce(boid, world, deltaTime, wanderTarget);
+        if (accelerationLeft > 0) {
+            wanderingBehavior.getSteeringForce(boid, world, deltaTime, wanderForce);
 
-            wanderTarget.scl(wanderScale);
-            float amount = headingTarget.len();
+            wanderForce.scl(wanderScale);
+            float amount = headingForce.len();
 
             if (accelerationLeft < amount) {
-                wanderTarget.nor().scl(accelerationLeft);
+                wanderForce.nor().scl(accelerationLeft);
             }
 
-            boid.acceleration.add(wanderTarget);
-            accelMaxed |= isAccelMax(boid);
+            boid.acceleration.add(wanderForce);
             accelerationLeft = boid.maxAcceleration - boid.acceleration.len();
         }
 
-        if (!accelMaxed) {
+        if (accelerationLeft > 0) {
             flockingBehavior.getSteeringForce(boid, world, deltaTime, flockCenter);
 
             flockCenter.scl(flockScale);
             float amount = flockCenter.len();
 
             if (accelerationLeft < amount) {
-                wanderTarget.nor().scl(accelerationLeft);
+                wanderForce.nor().scl(accelerationLeft);
             }
 
             boid.acceleration.add(flockCenter);
             accelerationLeft = boid.maxAcceleration - boid.acceleration.len();
-            accelMaxed |= isAccelMax(boid);
         }
 
 
-        if (!accelMaxed) {
-            headingBehavior.getSteeringForce(boid, world, deltaTime, headingTarget);
+        if (accelerationLeft > 0) {
+            headingBehavior.getSteeringForce(boid, world, deltaTime, headingForce);
 
-            headingTarget.scl(flockScale);
-            float amount = headingTarget.len();
+            headingForce.scl(flockScale);
+            float amount = headingForce.len();
 
             if (accelerationLeft < amount) {
-                wanderTarget.nor().scl(accelerationLeft);
+                wanderForce.nor().scl(accelerationLeft);
             }
 
-            boid.acceleration.add(headingTarget);
+            boid.acceleration.add(headingForce);
         }
 
         if (boid.acceleration.x == 0 && boid.acceleration.y == 0) {
             int x = 0;
             System.out.print(x);
         }
-    }
-
-    private boolean isAccelMax(Boid boid) {
-        return boid.maxAcceleration * boid.maxAcceleration < boid.acceleration.len2();
     }
 
 }
