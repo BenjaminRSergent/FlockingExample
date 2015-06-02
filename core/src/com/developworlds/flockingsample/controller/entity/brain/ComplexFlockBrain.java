@@ -10,7 +10,7 @@ import com.developworlds.flockingsample.controller.entity.behavior.goals.WanderB
 import com.developworlds.flockingsample.world.World;
 import com.developworlds.flockingsample.world.entity.Boid;
 
-public class WanderingFlockBrain extends BoidAI {
+public class ComplexFlockBrain extends BoidAI {
     float SLOW_DOWN_RADIUS = 500;
     FlockingBehavior flockingBehavior = new FlockingBehavior();
     MatchHeadingBehavior headingBehavior = new MatchHeadingBehavior();
@@ -92,11 +92,6 @@ public class WanderingFlockBrain extends BoidAI {
             }
 
             boid.acceleration.add(headingForce);
-        }
-
-        if (boid.acceleration.x == 0 && boid.acceleration.y == 0) {
-            int x = 0;
-            System.out.print(x);
         }
     }
 
