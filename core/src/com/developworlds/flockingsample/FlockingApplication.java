@@ -5,26 +5,17 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Pool;
 import com.developworlds.flockingsample.controller.entity.brain.BoidAI;
 import com.developworlds.flockingsample.controller.entity.brain.WanderingFlockBrain;
 import com.developworlds.flockingsample.controller.entity.locomotion.WrappingLocomotion;
 import com.developworlds.flockingsample.world.World;
 import com.developworlds.flockingsample.world.entity.Boid;
 
+
 public class FlockingApplication extends ApplicationAdapter {
     private SpriteBatch batch;
     private World world;
     private boolean running = false;
-    public static Pool<Vector2> vectorPool = new Pool<Vector2>() {
-
-        @Override
-        protected Vector2 newObject() {
-            return new Vector2();
-        }
-    };
-
 
     @Override
     public void create() {
@@ -64,7 +55,12 @@ public class FlockingApplication extends ApplicationAdapter {
     }
 
     private void update() {
-        world.update(Gdx.graphics.getDeltaTime());
+        try {
+            world.update(Gdx.graphics.getDeltaTime());
+        }catch (Exception ex) {
+
+            Gdx.app.log("UPDATE", "Update error " + ex, ex);
+        }
     }
 
 

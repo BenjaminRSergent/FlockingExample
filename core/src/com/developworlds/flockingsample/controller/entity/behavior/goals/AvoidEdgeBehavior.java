@@ -1,7 +1,6 @@
 package com.developworlds.flockingsample.controller.entity.behavior.goals;
 
 import com.badlogic.gdx.math.Vector2;
-import com.developworlds.flockingsample.FlockingApplication;
 import com.developworlds.flockingsample.controller.entity.behavior.steering.SteeringMethods;
 import com.developworlds.flockingsample.world.World;
 import com.developworlds.flockingsample.world.entity.Boid;
@@ -9,8 +8,8 @@ import com.developworlds.flockingsample.world.entity.Boid;
 public class AvoidEdgeBehavior implements Behavior {
     float tooClose = 300;
 
+    Vector2 target = new Vector2();
     public Vector2 getSteeringForce(Boid boid, World world, float deltaTime, Vector2 force) {
-        Vector2 target = FlockingApplication.vectorPool.obtain();
         target.set(boid.position);
 
         float distanceFromTrigger = 0;
@@ -42,8 +41,6 @@ public class AvoidEdgeBehavior implements Behavior {
         }
 
         SteeringMethods.seek(boid, target, force);
-
-        FlockingApplication.vectorPool.free(target);
 
         float forceScale = (distanceFromTrigger) / tooClose;
         force.scl(forceScale);

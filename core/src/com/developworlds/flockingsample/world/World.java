@@ -7,7 +7,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.developworlds.flockingsample.world.entity.Boid;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class World {
@@ -16,7 +15,7 @@ public class World {
     class Cell {
         private Vector2 position;
         private int size;
-        private List<Boid> boidsInCell = new LinkedList<Boid>();
+        private List<Boid> boidsInCell = new ArrayList<Boid>(100);
 
         public Cell(Vector2 position, int size) {
             this.position = position.cpy();
@@ -28,9 +27,11 @@ public class World {
         }
 
         public void remove(Boid boid) {
-            for(int index = 0; index < boidsInCell.size(); index++) {
-                if(boid == boidsInCell.get(index)) {
+            int size = boidsInCell.size();
+            for (int index = 0; index < size; index++) {
+                if (boid == boidsInCell.get(index)) {
                     boidsInCell.remove(index);
+                    break;
                 }
             }
         }
@@ -63,11 +64,13 @@ public class World {
     public ArrayList<Boid> getBoidsInRange(Circle circle) {
         ArrayList<Boid> inRange = getBoidsInCellsRange(circle);
 
-        for (int boidIndex = 0; boidIndex < inRange.size(); boidIndex++) {
+        int size = inRange.size();
+        for (int boidIndex = 0; boidIndex < size; boidIndex++) {
             Boid boid = inRange.get(boidIndex);
             if (!boid.isInside(circle)) {
                 inRange.remove(boidIndex);
                 boidIndex--;
+                size = inRange.size();
             }
         }
 
@@ -75,6 +78,7 @@ public class World {
     }
 
     ArrayList<Boid> boidList = new ArrayList<Boid>(1000);
+
     private ArrayList<Boid> getBoidsInCellsRange(Circle circle) {
         int cellRange = (int) (circle.radius / DEF_CELL_SIZE + 1);
 
@@ -84,7 +88,7 @@ public class World {
         for (int x = Math.max(0, startX); x < startX + 2 * cellRange && x < cells.length; x++) {
             for (int y = Math.max(0, startY); y < startY + 2 * cellRange && y < cells[0].length; y++) {
                 List<Boid> boidsInCell = cells[x][y].getBoidsInCell();
-                for(int boidIndex = 0; boidIndex < boidsInCell.size(); boidIndex++) {
+                for (int boidIndex = 0; boidIndex < boidsInCell.size(); boidIndex++) {
                     boidList.add(boidsInCell.get(boidIndex));
                 }
             }
@@ -94,14 +98,16 @@ public class World {
     }
 
     public void draw(SpriteBatch batch) {
-        for (int index = 0; index < boids.size(); index++) {
+        int size = boids.size();
+        for (int index = 0; index < size; index++) {
             boids.get(index).draw(batch);
         }
     }
 
 
     public void update(float deltaTime) {
-        for (int index = 0; index < boids.size(); index++) {
+        int size = boids.size();
+        for (int index = 0; index < size; index++) {
             Boid boid = boids.get(index);
             removeFromCell(boid);
             boid.update(this, deltaTime);

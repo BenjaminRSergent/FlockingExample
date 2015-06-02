@@ -1,7 +1,6 @@
 package com.developworlds.flockingsample.controller.entity.behavior.goals;
 
 import com.badlogic.gdx.math.Vector2;
-import com.developworlds.flockingsample.FlockingApplication;
 import com.developworlds.flockingsample.controller.entity.behavior.steering.SteeringMethods;
 import com.developworlds.flockingsample.world.World;
 import com.developworlds.flockingsample.world.entity.Boid;
@@ -16,22 +15,20 @@ public class WanderBehavior implements Behavior {
         currAngle = getRandomAngle();
     }
 
+    Vector2 target = new Vector2();
+    Vector2 innerPoint = new Vector2();
+
     public Vector2 getSteeringForce(Boid boid, World world, float deltaTime, Vector2 force) {
         float maxJitter = maxJitterPerSec * deltaTime;
 
-        Vector2 target = FlockingApplication.vectorPool.obtain();
         target.set(boid.velocity).nor().scl(circleDistance);
         target.add(boid.position);
 
         currAngle += getJitter(maxJitter);
 
-        Vector2 innerPoint = FlockingApplication.vectorPool.obtain();
-
         innerPoint.set((float) Math.cos(currAngle), (float) Math.sin(currAngle)).scl(circleRadius + boid.getRadius());
         target.add(innerPoint);
 
-        FlockingApplication.vectorPool.free(innerPoint);
-        FlockingApplication.vectorPool.free(target);
 
         SteeringMethods.seek(boid, target, force);
 

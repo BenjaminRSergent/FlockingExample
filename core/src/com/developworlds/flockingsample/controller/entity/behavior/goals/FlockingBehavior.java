@@ -2,7 +2,6 @@ package com.developworlds.flockingsample.controller.entity.behavior.goals;
 
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
-import com.developworlds.flockingsample.FlockingApplication;
 import com.developworlds.flockingsample.controller.entity.behavior.steering.SteeringMethods;
 import com.developworlds.flockingsample.world.World;
 import com.developworlds.flockingsample.world.entity.Boid;
@@ -17,16 +16,17 @@ public class FlockingBehavior implements Behavior {
         range.setRadius(DEF_RADIUS);
     }
 
+    Vector2 target = new Vector2();
     @Override
     public Vector2 getSteeringForce(Boid boid, World world, float deltaTime, Vector2 force) {
-        Vector2 target = FlockingApplication.vectorPool.obtain();
         range.setPosition(boid.position.x, boid.position.y);
 
         target.set(0, 0);
 
         List<Boid> boids = world.getBoidsInRange(range);
 
-        for (int index = 0; index < boids.size(); index++) {
+        int size = boids.size();
+        for (int index = 0; index < size; index++) {
             Boid flockmate = boids.get(index);
             if (!flockmate.equals(this)) {
                 target.add(flockmate.position);
@@ -39,8 +39,6 @@ public class FlockingBehavior implements Behavior {
             force.set(0, 0);
             return force;
         }
-
-        FlockingApplication.vectorPool.free(target);
 
         SteeringMethods.seek(boid, target, force);
 

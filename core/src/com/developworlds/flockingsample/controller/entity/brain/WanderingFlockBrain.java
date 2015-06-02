@@ -2,7 +2,6 @@ package com.developworlds.flockingsample.controller.entity.brain;
 
 
 import com.badlogic.gdx.math.Vector2;
-import com.developworlds.flockingsample.FlockingApplication;
 import com.developworlds.flockingsample.controller.entity.behavior.goals.AvoidEdgeBehavior;
 import com.developworlds.flockingsample.controller.entity.behavior.goals.FlockingBehavior;
 import com.developworlds.flockingsample.controller.entity.behavior.goals.MatchHeadingBehavior;
@@ -21,12 +20,13 @@ public class WanderingFlockBrain extends BoidAI {
     float wanderScale = 0.35f;
     float avoidScale = 0.75f;
 
+    Vector2 flockCenter = new Vector2();
+    Vector2 wanderTarget = new Vector2();
+    Vector2 headingTarget = new Vector2();
+    Vector2 avoidTarget = new Vector2();
+    Vector2 tmpVector = new Vector2();
     public void update(Boid boid, World world, float deltaTime) {
-        Vector2 flockCenter = FlockingApplication.vectorPool.obtain();
-        Vector2 wanderTarget = FlockingApplication.vectorPool.obtain();
-        Vector2 headingTarget = FlockingApplication.vectorPool.obtain();
-        Vector2 avoidTarget = FlockingApplication.vectorPool.obtain();
-        Vector2 tmpVector = FlockingApplication.vectorPool.obtain();
+        
 
         boid.acceleration.set(0, 0);
 
@@ -99,12 +99,6 @@ public class WanderingFlockBrain extends BoidAI {
             int x = 0;
             System.out.print(x);
         }
-
-        FlockingApplication.vectorPool.free(flockCenter);
-        FlockingApplication.vectorPool.free(wanderTarget);
-        FlockingApplication.vectorPool.free(headingTarget);
-        FlockingApplication.vectorPool.free(avoidTarget);
-        FlockingApplication.vectorPool.free(tmpVector);
     }
 
     private boolean isAccelMax(Boid boid) {
