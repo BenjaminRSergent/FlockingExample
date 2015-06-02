@@ -17,9 +17,9 @@ public class WanderingFlockBrain extends BoidAI {
     WanderBehavior wanderingBehavior = new WanderBehavior();
     AvoidEdgeBehavior avoidEdgeBehavior = new AvoidEdgeBehavior();
 
-    float flockScale = 0.6f;
-    float wanderScale = 0.3f;
-    float avoidScale = 0.7f;
+    float flockScale = 0.5f;
+    float wanderScale = 0.35f;
+    float avoidScale = 0.75f;
 
     public void update(Boid boid, World world, float deltaTime) {
         Vector2 flockCenter = FlockingApplication.vectorPool.obtain();

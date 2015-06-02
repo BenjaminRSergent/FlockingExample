@@ -16,13 +16,14 @@ public class Boid {
     private static final String BOID_TEXTURE = "simple_boid.png";
     private static final float MIN_FACING_VELO = 1;
     private static final String TAG = Boid.class.getSimpleName();
+    public static final int DEF_SIZE = 25;
     private Sprite sprite;
 
     public Color color = Color.BLUE;
     public Vector2 position = new Vector2();
     public Vector2 velocity = new Vector2();
     public Vector2 acceleration = new Vector2();
-    public Vector2 size = new Vector2(25, 25);
+    public Vector2 size = new Vector2(DEF_SIZE, DEF_SIZE);
 
     public float maxAcceleration = 400;
     public float maxSpeed = 200;

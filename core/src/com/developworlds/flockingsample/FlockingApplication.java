@@ -50,7 +50,7 @@ public class FlockingApplication extends ApplicationAdapter {
             if(!running) {
                 addBoids(150);
             }
-            running = !running;
+            running = true;
         }
         if (running) {
             update();

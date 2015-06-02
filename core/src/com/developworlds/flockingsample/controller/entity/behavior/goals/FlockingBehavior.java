@@ -33,7 +33,7 @@ public class FlockingBehavior implements Behavior {
             }
         }
 
-        if (boids.size() > 0) {
+        if (boids.size() > 1) {
             target.scl(1 / (float) boids.size());
         } else {
             force.set(0, 0);
