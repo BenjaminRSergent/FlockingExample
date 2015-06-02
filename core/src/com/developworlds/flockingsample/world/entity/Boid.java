@@ -22,7 +22,7 @@ public class Boid {
     public Vector2 position = new Vector2();
     public Vector2 desiredVelocity = new Vector2();
     public Vector2 velocity = new Vector2();
-    public Vector2 size = new Vector2(10, 10);
+    public Vector2 size = new Vector2(15, 15);
 
     public float maxAcceleration = 200;
     public float maxSpeed = 200;
@@ -42,7 +42,7 @@ public class Boid {
             boidAi.update(this, world, deltaTime);
         }
         if (locomotion != null) {
-            locomotion.update(this, deltaTime);
+            locomotion.update(this, world, deltaTime);
         }
 
         if (velocity.len2() > MIN_FACING_VELO) {

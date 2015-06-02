@@ -5,11 +5,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.developworlds.flockingsample.world.World;
 import com.developworlds.flockingsample.world.entity.Boid;
 
-public class WrappingLocomotion extends Locomotion {
+public class DisappearingLocomotion extends Locomotion {
     private Rectangle bounds;
     private Vector2 acceleration = new Vector2();
 
-    public WrappingLocomotion(Rectangle bounds) {
+    public DisappearingLocomotion(Rectangle bounds) {
         this.bounds = bounds;
     }
 
@@ -22,26 +22,15 @@ public class WrappingLocomotion extends Locomotion {
 
         Locomotion.integrate(boid, acceleration.nor().scl(boid.maxAcceleration), deltaTime);
 
-        wrapBoidPosition(boid);
+        if (isBoidOutOfBounds(boid)) {
+            world.removeBoid(boid);
+        }
     }
 
-    private void wrapBoidPosition(Boid boid) {
-        float halfWidth = boid.size.x/2;
-        float halfHeight = boid.size.y/2;
-        if(boid.position.x + halfWidth < bounds.x) {
-            boid.position.x += bounds.width;
-        }
-
-        if(boid.position.y + halfHeight < bounds.y) {
-            boid.position.y += bounds.height;
-        }
-
-        if(boid.position.x - halfWidth > bounds.width) {
-            boid.position.x -= bounds.width;
-        }
-
-        if(boid.position.y - halfHeight  > bounds.height) {
-            boid.position.y -= bounds.height;
-        }
+    private boolean isBoidOutOfBounds(Boid boid) {
+        float halfWidth = boid.size.x / 2;
+        float halfHeight = boid.size.y / 2;
+        return boid.position.x + halfWidth < bounds.x || boid.position.y + halfHeight < bounds.y ||
+                boid.position.x - halfWidth > bounds.width || boid.position.y - halfHeight > bounds.height;
     }
 }
