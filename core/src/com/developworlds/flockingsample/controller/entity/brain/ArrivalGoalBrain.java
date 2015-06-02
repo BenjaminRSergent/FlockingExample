@@ -1,6 +1,7 @@
 package com.developworlds.flockingsample.controller.entity.brain;
 
 import com.badlogic.gdx.math.Vector2;
+import com.developworlds.flockingsample.controller.entity.behavior.steering.SteeringMethods;
 import com.developworlds.flockingsample.world.World;
 import com.developworlds.flockingsample.world.entity.Boid;
 
@@ -9,7 +10,7 @@ public class ArrivalGoalBrain extends BoidAI {
     private float slowdownRadius = 250;
 
     public void update(Boid boid, World world, float deltaTime) {
-        boid.desiredVelocity.set(com.developworlds.flockingsample.controller.entity.brain.behavior.Behaviors.arrive(boid, goal, slowdownRadius));
+        SteeringMethods.arrive(boid, goal, slowdownRadius, boid.desiredVelocity);
     }
 
     public void setGoal(Vector2 goal) {

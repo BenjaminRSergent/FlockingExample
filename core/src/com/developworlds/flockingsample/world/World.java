@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class World {
     private ArrayList<Boid> boids = new ArrayList<Boid>();
 
+    // TODO: Quadtrees?
     public ArrayList<Boid> getBoidsInRange(Circle circle) {
         // Naive implementation for now.
         ArrayList<Boid> inRange = new ArrayList<Boid>(boids.size());
@@ -27,6 +28,7 @@ public class World {
             boids.get(index).draw(batch);
         }
     }
+
 
     public void update(float deltaTime) {
         for (int index = 0; index < boids.size(); index++) {

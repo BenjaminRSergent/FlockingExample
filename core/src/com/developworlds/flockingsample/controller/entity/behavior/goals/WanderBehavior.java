@@ -1,22 +1,21 @@
-package com.developworlds.flockingsample.controller.entity.brain.behavior;
+package com.developworlds.flockingsample.controller.entity.behavior.goals;
 
 import com.badlogic.gdx.math.Vector2;
+import com.developworlds.flockingsample.world.World;
 import com.developworlds.flockingsample.world.entity.Boid;
 
-public class WanderBehavior {
+public class WanderBehavior implements Behavior{
     private float circleDistance = 100;
     private float circleRadius = 90;
     private float maxJitterPerSec = (float) (2 * Math.PI);
     private float currAngle;
-
-    private Vector2 target = new Vector2();
     private Vector2 innerPoint = new Vector2();
 
     public WanderBehavior() {
         currAngle = getRandomAngle();
     }
 
-    public Vector2 getWanderTarget(Boid boid, float deltaTime) {
+    public Vector2 getTarget(Boid boid, World world, float deltaTime, Vector2 target) {
         float maxJitter = maxJitterPerSec * deltaTime;
 
         target.set(boid.velocity).nor().scl(circleDistance);
@@ -28,7 +27,7 @@ public class WanderBehavior {
 
         target.add(innerPoint);
 
-        return target; // We reset this at the beginning, so we don't bother to make a copy.
+        return target;
     }
 
     private float getRandomAngle() {
@@ -71,4 +70,6 @@ public class WanderBehavior {
     public void setMaxJitterPerSec(float maxJitterPerSec) {
         this.maxJitterPerSec = maxJitterPerSec;
     }
+
+
 }

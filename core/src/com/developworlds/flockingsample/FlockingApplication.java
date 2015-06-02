@@ -5,8 +5,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
-import com.developworlds.flockingsample.controller.entity.brain.WanderingBrain;
-import com.developworlds.flockingsample.controller.entity.locomotion.DisappearingLocomotion;
+import com.developworlds.flockingsample.controller.entity.brain.BoidAI;
+import com.developworlds.flockingsample.controller.entity.brain.WanderingFlockBrain;
+import com.developworlds.flockingsample.controller.entity.locomotion.WrappingLocomotion;
 import com.developworlds.flockingsample.world.World;
 import com.developworlds.flockingsample.world.entity.Boid;
 
@@ -25,9 +26,9 @@ public class FlockingApplication extends ApplicationAdapter {
     private void addBoids(int numToAdd) {
         for (int index = 0; index < numToAdd; index++) {
             Boid boid = new Boid();
-            boid.position.set(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
-            boid.setLocomotion(new DisappearingLocomotion(new Rectangle(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()), world));
-            WanderingBrain brain = new WanderingBrain();
+            boid.position.set((float) (Gdx.graphics.getWidth() * Math.random()), (float) (Gdx.graphics.getHeight() * Math.random()));
+            boid.setLocomotion(new WrappingLocomotion(new Rectangle(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight())));
+            BoidAI brain = new WanderingFlockBrain();
             boid.setBoidAi(brain);
             world.addBoid(boid);
         }
@@ -37,7 +38,7 @@ public class FlockingApplication extends ApplicationAdapter {
     public void render() {
         if (Gdx.input.justTouched()) {
             if(!running) {
-                addBoids(500);
+                addBoids(250);
             }
             running = !running;
         }

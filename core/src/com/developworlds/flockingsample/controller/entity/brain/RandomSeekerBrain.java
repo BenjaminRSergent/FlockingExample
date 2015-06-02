@@ -2,6 +2,7 @@ package com.developworlds.flockingsample.controller.entity.brain;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.developworlds.flockingsample.controller.entity.behavior.steering.SteeringMethods;
 import com.developworlds.flockingsample.world.World;
 import com.developworlds.flockingsample.world.entity.Boid;
 
@@ -20,7 +21,7 @@ public class RandomSeekerBrain extends BoidAI {
             setGoalInBounds();
         }
 
-        boid.desiredVelocity.set(com.developworlds.flockingsample.controller.entity.brain.behavior.Behaviors.seek(boid, goal));
+        SteeringMethods.seek(boid, goal, boid.desiredVelocity);
     }
 
     private boolean isCloseToGoal(Boid boid) {
