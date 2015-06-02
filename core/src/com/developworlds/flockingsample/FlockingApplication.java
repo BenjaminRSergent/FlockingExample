@@ -22,6 +22,7 @@ public class FlockingApplication extends ApplicationAdapter {
         batch = new SpriteBatch();
         world = new World(new Rectangle(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 
+        new Thread(updater).start();
     }
 
     private void addBoids(int numToAdd) {
@@ -35,16 +36,20 @@ public class FlockingApplication extends ApplicationAdapter {
         }
     }
 
+    float accumulator = 0;
+    final float SEC_PER_FRAME = 1 / 30.0f;
+
     @Override
     public void render() {
+
         if (Gdx.input.justTouched()) {
-            if(!running) {
+            if (!running) {
                 addBoids(300);
             }
             running = true;
         }
         if (running) {
-            update();
+            accumulator += Gdx.graphics.getDeltaTime();
         }
 
         Gdx.gl.glClearColor(1, 1, 1, 1);
@@ -54,20 +59,30 @@ public class FlockingApplication extends ApplicationAdapter {
         batch.end();
     }
 
-    float accumulator = 0;
-    final float SEC_PER_FRAME = 1/30.0f;
-    private void update() {
-        accumulator += Gdx.graphics.getDeltaTime();
-        try {
-            while(accumulator > SEC_PER_FRAME) {
-                world.update(SEC_PER_FRAME);
-                accumulator -= SEC_PER_FRAME;
-            }
-        }catch (Exception ex) {
 
-            Gdx.app.log("UPDATE", "Update error " + ex, ex);
+    public Runnable updater = new Runnable() {
+        public void run() {
+            while (true) {
+                try {
+                    while (accumulator > SEC_PER_FRAME) {
+                        if (running) {
+                            world.update(SEC_PER_FRAME);
+                        }
+                        accumulator -= SEC_PER_FRAME;
+                    }
+                } catch (Exception ex) {
+
+                    Gdx.app.log("UPDATE", "Update error " + ex, ex);
+                }
+                try {
+                    Thread.sleep((long) (SEC_PER_FRAME / 2 * 1000));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
         }
-    }
+
+    };
 
 
 }
