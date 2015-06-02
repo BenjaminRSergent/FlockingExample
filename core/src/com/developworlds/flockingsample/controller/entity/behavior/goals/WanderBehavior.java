@@ -1,6 +1,7 @@
 package com.developworlds.flockingsample.controller.entity.behavior.goals;
 
 import com.badlogic.gdx.math.Vector2;
+import com.developworlds.flockingsample.FlockingApplication;
 import com.developworlds.flockingsample.world.World;
 import com.developworlds.flockingsample.world.entity.Boid;
 
@@ -9,7 +10,6 @@ public class WanderBehavior implements Behavior{
     private float circleRadius = 90;
     private float maxJitterPerSec = (float) (2 * Math.PI);
     private float currAngle;
-    private Vector2 innerPoint = new Vector2();
 
     public WanderBehavior() {
         currAngle = getRandomAngle();
@@ -23,9 +23,12 @@ public class WanderBehavior implements Behavior{
 
         currAngle += getJitter(maxJitter);
 
-        innerPoint.set((float) Math.cos(currAngle), (float) Math.sin(currAngle)).scl(circleRadius + boid.getRadius());
+        Vector2 innerPoint = FlockingApplication.vectorPool.obtain();
 
+        innerPoint.set((float) Math.cos(currAngle), (float) Math.sin(currAngle)).scl(circleRadius + boid.getRadius());
         target.add(innerPoint);
+
+        FlockingApplication.vectorPool.free(innerPoint);
 
         return target;
     }

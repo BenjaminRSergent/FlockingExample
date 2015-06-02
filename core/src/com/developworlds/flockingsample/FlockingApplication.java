@@ -5,6 +5,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Pool;
 import com.developworlds.flockingsample.controller.entity.brain.BoidAI;
 import com.developworlds.flockingsample.controller.entity.brain.WanderingFlockBrain;
 import com.developworlds.flockingsample.controller.entity.locomotion.WrappingLocomotion;
@@ -15,11 +17,19 @@ public class FlockingApplication extends ApplicationAdapter {
     private SpriteBatch batch;
     private World world;
     private boolean running = false;
+    public static Pool<Vector2> vectorPool = new Pool<Vector2>() {
+
+        @Override
+        protected Vector2 newObject() {
+            return new Vector2();
+        }
+    };
+
 
     @Override
     public void create() {
         batch = new SpriteBatch();
-        world = new World();
+        world = new World(new Rectangle(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 
     }
 
@@ -38,7 +48,7 @@ public class FlockingApplication extends ApplicationAdapter {
     public void render() {
         if (Gdx.input.justTouched()) {
             if(!running) {
-                addBoids(250);
+                addBoids(1000);
             }
             running = !running;
         }

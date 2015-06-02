@@ -8,7 +8,7 @@ import com.developworlds.flockingsample.world.entity.Boid;
 import java.util.List;
 
 public class FlockingBehavior implements Behavior {
-    float DEF_RADIUS = 200;
+    float DEF_RADIUS = 75;
     Circle range = new Circle();
 
     public FlockingBehavior() {

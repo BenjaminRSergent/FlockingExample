@@ -11,7 +11,7 @@ import java.util.List;
  * Created by benjamin-sergent on 6/2/15.
  */
 public class MatchHeadingBehavior implements Behavior {
-    float DEF_RADIUS = 100;
+    float DEF_RADIUS = 75;
     Circle range = new Circle();
 
     public MatchHeadingBehavior() {

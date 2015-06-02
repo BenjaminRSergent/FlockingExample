@@ -2,12 +2,18 @@ package com.developworlds.flockingsample.world;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Rectangle;
 import com.developworlds.flockingsample.world.entity.Boid;
 
 import java.util.ArrayList;
 
 public class World {
     private ArrayList<Boid> boids = new ArrayList<Boid>();
+    private Rectangle bounds = new Rectangle();
+
+    public World(Rectangle bounds) {
+        this.bounds.set(bounds);
+    }
 
     // TODO: Quadtrees?
     public ArrayList<Boid> getBoidsInRange(Circle circle) {
@@ -34,6 +40,10 @@ public class World {
         for (int index = 0; index < boids.size(); index++) {
             boids.get(index).update(this, deltaTime);
         }
+    }
+
+    public Rectangle getBounds() {
+        return bounds;
     }
 
     public void addBoid(Boid boid) {
