@@ -6,7 +6,7 @@ import com.developworlds.flockingsample.controller.entity.behavior.steering.Stee
 import com.developworlds.flockingsample.world.World;
 import com.developworlds.flockingsample.world.entity.Boid;
 
-public class RandomSeekerBrain extends BoidAI {
+public class RandomSeekerBrain implements BoidAI {
     private Vector2 goal = new Vector2();
     private float slowdownRadius = 250;
     private Rectangle bounds;

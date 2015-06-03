@@ -5,7 +5,7 @@ import com.developworlds.flockingsample.controller.entity.behavior.steering.Stee
 import com.developworlds.flockingsample.world.World;
 import com.developworlds.flockingsample.world.entity.Boid;
 
-public class SimpleGoalBrain extends BoidAI {
+public class SimpleGoalBrain implements BoidAI {
     private Vector2 goal = new Vector2();
     private Vector2 desiredVelocity = new Vector2();
 

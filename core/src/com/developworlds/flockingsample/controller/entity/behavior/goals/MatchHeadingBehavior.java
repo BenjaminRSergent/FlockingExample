@@ -10,7 +10,7 @@ import java.util.List;
 
 
 public class MatchHeadingBehavior implements Behavior {
-    float DEF_RADIUS = Boid.DEF_SIZE*4;
+    float DEF_RADIUS = Boid.DEF_SIZE*3;
     Circle range = new Circle();
 
     public MatchHeadingBehavior() {

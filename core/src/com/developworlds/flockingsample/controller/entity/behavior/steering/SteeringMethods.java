@@ -16,49 +16,48 @@ public class SteeringMethods {
 
         if (dist < closeEnough) {
             // Desire to stop
-            desiredVelocity.set(0, 0);
-            return desiredVelocity;
+            desiredVelocity.set(boid.velocity).scl(-1);
         }
 
+        desiredVelocity.sub(boid.velocity);
+        dist = desiredVelocity.len();
+
         float desiredSpeed = boid.maxAcceleration;
+
         if (dist < slowdownRadius) {
             desiredSpeed = boid.maxAcceleration * ((slowdownRadius - dist) / slowdownRadius);
         }
 
-
-        // Desire to go in the direction of the goal as fast as possible
-
-        if (dist > 0) {
-            desiredVelocity.scl(1 / dist).scl(desiredSpeed);
-        }
-
-        return desiredVelocity.sub(boid.velocity);
+        return desiredVelocity.nor().scl(desiredSpeed);
     }
 
-    public static Vector2 depart(Boid boid, Vector2 antiGoal, float slowdownRadius, float farEnough, Vector2 desiredVelocity) {
-        desiredVelocity.set(antiGoal.cpy());
-        desiredVelocity.sub(boid.position);
+    public static Vector2 depart(Boid boid, Vector2 antiGoal, float slowdownRadius, float farEnough, Vector2 force) {
+        float closeEnough = Math.max(boid.size.x, boid.size.y);
 
-        float dist = desiredVelocity.len();
+        force.set(boid.position);
+        force.sub(antiGoal);
+
+        float dist = force.len();
+
+        if (dist > farEnough) {
+            force.set(0,0);
+            return force;
+        }
+
+        force.sub(boid.velocity);
+        dist = force.len();
 
         float desiredSpeed = boid.maxAcceleration;
 
         if (dist > slowdownRadius) {
-            desiredSpeed = boid.maxAcceleration * ((farEnough - dist) / (farEnough - slowdownRadius));
+            desiredSpeed = boid.maxAcceleration * (1 - ((dist - slowdownRadius) / slowdownRadius));
         }
 
-
-        // Desire to go in the direction of the goal as fast as possible
-
-        if (dist > 0) {
-            desiredVelocity.scl(1 / dist).scl(desiredSpeed);
-        }
-
-        return desiredVelocity.sub(boid.velocity);
+        return force.nor().scl(desiredSpeed);
     }
 
     public static Vector2 flee(Boid boid, Vector2 antiGoal, Vector2 desiredVelocity) {
-        return seek(boid, antiGoal,desiredVelocity).scl(-1);
+        return seek(boid, antiGoal, desiredVelocity).scl(-1);
     }
 
     public static Vector2 seek(Boid boid, Vector2 goal, Vector2 desiredVelocity) {

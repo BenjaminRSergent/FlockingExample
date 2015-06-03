@@ -5,7 +5,7 @@ import com.developworlds.flockingsample.controller.entity.behavior.steering.Stee
 import com.developworlds.flockingsample.world.World;
 import com.developworlds.flockingsample.world.entity.Boid;
 
-public class ArrivalGoalBrain extends BoidAI {
+public class ArrivalGoalBrain implements BoidAI {
     private Vector2 goal = new Vector2();
     private float slowdownRadius = 250;
 

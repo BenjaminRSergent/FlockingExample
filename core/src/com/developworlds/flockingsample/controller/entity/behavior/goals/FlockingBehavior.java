@@ -9,8 +9,8 @@ import com.developworlds.flockingsample.world.entity.Boid;
 import java.util.List;
 
 public class FlockingBehavior implements Behavior {
-    float DEF_RADIUS = Boid.DEF_SIZE*4;
-    Circle range = new Circle();
+    public final float DEF_RADIUS = Boid.DEF_SIZE*4;
+    private Circle range = new Circle();
 
     public FlockingBehavior() {
         range.setRadius(DEF_RADIUS);
@@ -40,7 +40,7 @@ public class FlockingBehavior implements Behavior {
             return force;
         }
 
-        SteeringMethods.seek(boid, target, force);
+        SteeringMethods.arrive(boid, target, Boid.DEF_SIZE*3, force);
 
         return force;
     }
