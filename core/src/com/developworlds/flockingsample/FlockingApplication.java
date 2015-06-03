@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.developworlds.flockingsample.controller.entity.brain.BoidAI;
 import com.developworlds.flockingsample.controller.entity.brain.ComplexFlockBrain;
-import com.developworlds.flockingsample.controller.entity.locomotion.BasicLocomotion;
+import com.developworlds.flockingsample.controller.entity.locomotion.WrappingLocomotion;
 import com.developworlds.flockingsample.world.World;
 import com.developworlds.flockingsample.world.entity.Boid;
 
@@ -29,7 +29,7 @@ public class FlockingApplication extends ApplicationAdapter {
         for (int index = 0; index < numToAdd; index++) {
             Boid boid = new Boid();
             boid.position.set((float) (Gdx.graphics.getWidth() * Math.random()), (float) (Gdx.graphics.getHeight() * Math.random()));
-            boid.setLocomotion(new BasicLocomotion());
+            boid.setLocomotion(new WrappingLocomotion(world.getBounds()));
             BoidAI brain = new ComplexFlockBrain();
             boid.setBoidAi(brain);
             world.addBoid(boid);
@@ -44,7 +44,7 @@ public class FlockingApplication extends ApplicationAdapter {
 
         if (Gdx.input.justTouched()) {
             if (!running) {
-                addBoids(400);
+                addBoids(300);
             }
             running = true;
         }

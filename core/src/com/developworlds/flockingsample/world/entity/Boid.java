@@ -16,7 +16,7 @@ public class Boid {
     private static final String BOID_TEXTURE = "simple_boid.png";
     private static final float MIN_FACING_VELO = 1;
     private static final String TAG = Boid.class.getSimpleName();
-    public static final int DEF_SIZE = 20;
+    public static final int DEF_SIZE = 15;
     private Sprite sprite;
 
     public Color color = Color.BLUE;

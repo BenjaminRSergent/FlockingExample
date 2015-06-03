@@ -8,7 +8,7 @@ import com.developworlds.flockingsample.world.entity.Boid;
 import java.util.List;
 
 public class SeperationBehavior implements Behavior {
-    float DEF_RADIUS = Boid.DEF_SIZE * 2;
+    float DEF_RADIUS = Boid.DEF_SIZE*1.5f;
     Circle range = new Circle();
 
     public SeperationBehavior() {

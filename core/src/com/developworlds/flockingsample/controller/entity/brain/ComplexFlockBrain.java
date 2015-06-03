@@ -18,22 +18,23 @@ public class ComplexFlockBrain implements BoidAI {
     AvoidEdgeBehavior avoidEdgeBehavior = new AvoidEdgeBehavior();
     SeperationBehavior seperationBehavior = new SeperationBehavior();
 
-    float headingScale = 0.4f;
+    float headingScale = 0.2f;
     float flockScale = 0.4f;
-    float wanderScale = 0.5f;
+    float wanderScale = 0.4f;
     float avoidScale = 0.9f;
-    float seperationScale = 0.9f;
+    float seperationScale = 0.5f;
 
     Vector2 tmpVector = new Vector2();
 
     public void update(Boid boid, World world, float deltaTime) {
         boid.acceleration.set(0, 0);
 
-        integrateBehavior(avoidEdgeBehavior, boid, world, deltaTime, avoidScale);
+        //integrateBehavior(avoidEdgeBehavior, boid, world, deltaTime, avoidScale);
         integrateBehavior(seperationBehavior, boid, world, deltaTime, seperationScale);
-        integrateBehavior(wanderingBehavior, boid, world, deltaTime, wanderScale);
-        integrateBehavior(headingBehavior, boid, world, deltaTime, headingScale);
         integrateBehavior(flockingBehavior, boid, world, deltaTime, flockScale);
+        integrateBehavior(headingBehavior, boid, world, deltaTime, headingScale);
+        integrateBehavior(wanderingBehavior, boid, world, deltaTime, wanderScale);
+
 
     }
 

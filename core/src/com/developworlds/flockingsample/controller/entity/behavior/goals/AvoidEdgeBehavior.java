@@ -6,7 +6,7 @@ import com.developworlds.flockingsample.world.World;
 import com.developworlds.flockingsample.world.entity.Boid;
 
 public class AvoidEdgeBehavior implements Behavior {
-    float tooClose = Boid.DEF_SIZE * 5;
+    float tooClose = Boid.DEF_SIZE * 10;
 
     Vector2 target = new Vector2();
 
