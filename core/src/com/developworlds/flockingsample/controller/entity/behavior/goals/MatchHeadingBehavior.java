@@ -2,7 +2,6 @@ package com.developworlds.flockingsample.controller.entity.behavior.goals;
 
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
-import com.developworlds.flockingsample.controller.entity.behavior.steering.SteeringMethods;
 import com.developworlds.flockingsample.world.World;
 import com.developworlds.flockingsample.world.entity.Boid;
 
@@ -17,36 +16,34 @@ public class MatchHeadingBehavior implements Behavior {
         range.setRadius(DEF_RADIUS);
     }
 
-
-    Vector2 target = new Vector2();
-
+    Vector2 boidHeading = new Vector2();
     @Override
     public Vector2 getSteeringForce(Boid boid, World world, float deltaTime, Vector2 force) {
         range.setPosition(boid.position.x, boid.position.y);
 
-        target.set(0, 0);
+        force.set(0, 0);
 
         List<Boid> boids = world.getBoidsInRange(range);
 
         int size = boids.size();
         for (int index = 0; index < size; index++) {
             Boid flockmate = boids.get(index);
-            if (!flockmate.equals(this)) {
-                target.add(flockmate.velocity);
+            if (!flockmate.equals(boid)) {
+                boidHeading.set(boid.velocity).nor();
+                force.add(boidHeading);
             }
         }
 
-        if (boids.size() > 0) {
-            target.scl(1 / (float) boids.size());
+        if (boids.size() > 1) {
+            force.scl(1 / (float) (boids.size() - 1));
         } else {
             force.set(0, 0);
             return force;
         }
 
-        target.nor().scl(boid.getRadius() * 10).add(boid.position);
+        boidHeading.set(boid.velocity).nor();
+        force.sub(boidHeading).nor().scl(boid.maxAcceleration);
 
-        SteeringMethods.seek(boid, target, force);
-
-        return force;
+        return force.add(force);
     }
 }

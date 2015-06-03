@@ -20,7 +20,7 @@ public class ComplexFlockBrain implements BoidAI {
 
     float headingScale = 0.4f;
     float flockScale = 0.4f;
-    float wanderScale = 0.3f;
+    float wanderScale = 0.5f;
     float avoidScale = 0.9f;
     float seperationScale = 0.9f;
 
@@ -31,9 +31,10 @@ public class ComplexFlockBrain implements BoidAI {
 
         integrateBehavior(avoidEdgeBehavior, boid, world, deltaTime, avoidScale);
         integrateBehavior(seperationBehavior, boid, world, deltaTime, seperationScale);
+        integrateBehavior(wanderingBehavior, boid, world, deltaTime, wanderScale);
         integrateBehavior(headingBehavior, boid, world, deltaTime, headingScale);
         integrateBehavior(flockingBehavior, boid, world, deltaTime, flockScale);
-        integrateBehavior(wanderingBehavior, boid, world, deltaTime, wanderScale);
+
     }
 
     public void integrateBehavior(Behavior behavior, Boid boid, World world, float deltaTime, float scale) {

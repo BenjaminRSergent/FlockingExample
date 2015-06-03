@@ -71,7 +71,7 @@ public class World {
             if (!boid.isInside(circle)) {
                 inRange.remove(boidIndex);
                 boidIndex--;
-                size = inRange.size();
+                size--;
             }
         }
 
@@ -81,6 +81,7 @@ public class World {
     ArrayList<Boid> boidList = new ArrayList<Boid>(1000);
 
     private ArrayList<Boid> getBoidsInCellsRange(Circle circle) {
+        boidList.clear();
         int cellRange = (int) (circle.radius / DEF_CELL_SIZE + 1);
 
         int startX = (int) (circle.x / DEF_CELL_SIZE - cellRange);
@@ -166,7 +167,6 @@ public class World {
     public void addBoid(Boid boid) {
         boids.add(boid);
 
-        addToCell(boid);
     }
 
     public void removeBoid(Boid boid) {

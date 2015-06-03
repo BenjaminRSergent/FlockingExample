@@ -29,7 +29,6 @@ public class FlockingApplication extends ApplicationAdapter {
         for (int index = 0; index < numToAdd; index++) {
             Boid boid = new Boid();
             boid.position.set((float) (Gdx.graphics.getWidth() * Math.random()), (float) (Gdx.graphics.getHeight() * Math.random()));
-            boid.velocity.set((float) (boid.maxSpeed * Math.random() - boid.maxSpeed/2), (float) (boid.maxSpeed * Math.random() - boid.maxSpeed/2));
             boid.setLocomotion(new BasicLocomotion());
             BoidAI brain = new ComplexFlockBrain();
             boid.setBoidAi(brain);

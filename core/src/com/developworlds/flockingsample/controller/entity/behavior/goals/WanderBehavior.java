@@ -10,13 +10,14 @@ public class WanderBehavior implements Behavior {
     private float circleRadius = 90;
     private float maxJitterPerSec = (float) (4 * Math.PI);
     private float currAngle;
+    Vector2 target = new Vector2();
+    Vector2 innerPoint = new Vector2();
 
     public WanderBehavior() {
         currAngle = getRandomAngle();
     }
 
-    Vector2 target = new Vector2();
-    Vector2 innerPoint = new Vector2();
+
 
     public Vector2 getSteeringForce(Boid boid, World world, float deltaTime, Vector2 force) {
         float maxJitter = maxJitterPerSec * deltaTime;
