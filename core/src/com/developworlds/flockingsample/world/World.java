@@ -11,17 +11,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class World {
-    private static final int DEF_CELL_SIZE = Boid.DEF_SIZE * 2;
+    private final int defaultCellSize;
 
     class Cell {
-        private Vector2 position;
-        private int size;
         private List<Boid> boidsInCell = new LinkedList<Boid>();
-
-        public Cell(Vector2 position, int size) {
-            this.position = position.cpy();
-            this.size = size;
-        }
 
         public void add(Boid boid) {
             boidsInCell.add(boid);
@@ -50,14 +43,17 @@ public class World {
     public World(Rectangle bounds) {
         this.bounds.set(bounds);
 
-        int xCells = (int) (bounds.width / DEF_CELL_SIZE + 1);
-        int yCells = (int) (bounds.height / DEF_CELL_SIZE + 1);
+        Boid.setBoidSize((int) (bounds.getWidth() / 100));
+        defaultCellSize = Boid.getBoidSize() * 3;
+
+        int xCells = (int) (bounds.width / defaultCellSize + 1);
+        int yCells = (int) (bounds.height / defaultCellSize + 1);
 
         cells = new Cell[xCells][yCells];
 
         for (int x = 0; x < xCells; x++) {
             for (int y = 0; y < yCells; y++) {
-                cells[x][y] = new Cell(new Vector2(x * DEF_CELL_SIZE, y * DEF_CELL_SIZE), DEF_CELL_SIZE);
+                cells[x][y] = new Cell();
             }
         }
     }
@@ -82,10 +78,10 @@ public class World {
 
     private ArrayList<Boid> getBoidsInCellsRange(Circle circle) {
         boidList.clear();
-        int cellRange = (int) (circle.radius / DEF_CELL_SIZE + 1);
+        int cellRange = (int) (circle.radius / defaultCellSize + 1);
 
-        int startX = (int) (circle.x / DEF_CELL_SIZE - cellRange);
-        int startY = (int) (circle.y / DEF_CELL_SIZE - cellRange);
+        int startX = (int) (circle.x / defaultCellSize - cellRange);
+        int startY = (int) (circle.y / defaultCellSize - cellRange);
 
         for (int x = Math.max(0, startX); x < startX + 2 * cellRange && x < cells.length; x++) {
             for (int y = Math.max(0, startY); y < startY + 2 * cellRange && y < cells[0].length; y++) {
@@ -148,8 +144,8 @@ public class World {
     }
 
     private Cell getCellAtPosition(Vector2 position) {
-        int cellX = (int) (position.x / DEF_CELL_SIZE);
-        int cellY = (int) (position.y / DEF_CELL_SIZE);
+        int cellX = (int) (position.x / defaultCellSize);
+        int cellY = (int) (position.y / defaultCellSize);
 
         if (cellX > 0 && cellX < cells.length
                 && cellY > 0 && cellY < cells[0].length) {

@@ -13,19 +13,21 @@ import com.developworlds.flockingsample.world.World;
 
 
 public class Boid {
+    private static final String TAG = Boid.class.getSimpleName();
+
     private static final String BOID_TEXTURE = "simple_boid.png";
     private static final float MIN_FACING_VELO = 1;
-    private static final String TAG = Boid.class.getSimpleName();
-    public static final int DEF_SIZE = 15;
+
+    private static int boidSize;
     private Sprite sprite;
 
     public Color color = Color.BLUE;
     public Vector2 position = new Vector2();
     public Vector2 velocity = new Vector2();
     public Vector2 acceleration = new Vector2();
-    public Vector2 size = new Vector2(DEF_SIZE, DEF_SIZE);
+    public Vector2 size = new Vector2(getBoidSize(), getBoidSize());
 
-    public float maxSpeed = 125;
+    public float maxSpeed = 250;
     public float maxAcceleration = maxSpeed * 2;
 
     private BoidAI boidAi;
@@ -33,7 +35,6 @@ public class Boid {
     private float facingRotation;
     private BoidType type = BoidType.Basic;
     private LowPassFilter facingSmoother = new LowPassFilter(0.1f);
-
 
     public Boid() {
         sprite = new Sprite(TextureManager.get().getTexture(BOID_TEXTURE));
@@ -64,6 +65,15 @@ public class Boid {
         sprite.draw(batch);
     }
 
+
+    public static int getBoidSize() {
+        return boidSize;
+    }
+
+    public static void setBoidSize(int boidSize) {
+        Boid.boidSize = boidSize;
+    }
+
     public void setBoidAi(BoidAI boidAi) {
         this.boidAi = boidAi;
     }
@@ -90,5 +100,9 @@ public class Boid {
 
     public float getRadius() {
         return Math.max(size.x, size.y);
+    }
+
+    public static void init() {
+        TextureManager.get().getTexture(BOID_TEXTURE); // Ensure texture is loaded on gl thread
     }
 }

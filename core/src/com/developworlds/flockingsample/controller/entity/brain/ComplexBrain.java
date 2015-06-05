@@ -2,6 +2,7 @@ package com.developworlds.flockingsample.controller.entity.brain;
 
 import com.badlogic.gdx.math.Vector2;
 import com.developworlds.flockingsample.controller.entity.behavior.goals.Behavior;
+import com.developworlds.flockingsample.controller.entity.behavior.steering.SteeringMethods;
 import com.developworlds.flockingsample.world.World;
 import com.developworlds.flockingsample.world.entity.Boid;
 
@@ -20,12 +21,19 @@ public class ComplexBrain implements BoidAI {
         }
     }
 
+    public boolean doFlee = false;
+    public Vector2 fleePoint = new Vector2(0,0);
+
     ArrayList<BehaviorData> behaviors = new ArrayList<BehaviorData>();
 
     Vector2 tmpVector = new Vector2();
 
     public void update(Boid boid, World world, float deltaTime) {
         boid.acceleration.set(0, 0);
+
+        if(doFlee) {
+            SteeringMethods.depart(boid, fleePoint, Boid.getBoidSize() * 10, boid.acceleration);
+        }
 
         for(int index = 0; index < behaviors.size(); index++) {
             BehaviorData data = behaviors.get(index);

@@ -8,7 +8,7 @@ import com.developworlds.flockingsample.world.entity.Boid;
 import java.util.List;
 
 public class SeperationBehavior implements Behavior {
-    float DEF_RADIUS = Boid.DEF_SIZE*1.5f;
+    float DEF_RADIUS = Boid.getBoidSize() + 5;
     Circle range = new Circle();
 
     public SeperationBehavior() {
@@ -34,7 +34,7 @@ public class SeperationBehavior implements Behavior {
                 memberToBoid.sub(flockmate.position);
                 float toMember = memberToBoid.len();
 
-                memberToBoid.scl(boid.maxAcceleration / toMember).scl(Boid.DEF_SIZE / toMember);
+                memberToBoid.scl(boid.maxAcceleration / toMember).scl(Boid.getBoidSize() / toMember);
                 force.add(memberToBoid);
             }
         }

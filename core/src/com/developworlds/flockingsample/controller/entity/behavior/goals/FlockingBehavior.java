@@ -16,7 +16,7 @@ public class FlockingBehavior implements Behavior {
         range.setRadius(DEF_RADIUS);
     }
 
-    Vector2 target = new Vector2();
+    private Vector2 target = new Vector2();
     @Override
     public Vector2 getSteeringForce(Boid boid, World world, float deltaTime, Vector2 force) {
         range.setPosition(boid.position.x, boid.position.y);
